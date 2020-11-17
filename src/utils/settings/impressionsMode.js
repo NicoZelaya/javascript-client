@@ -1,5 +1,5 @@
 import { DEBUG, OPTIMIZED } from '../constants';
-import logFactory from '../logger';
+import { logFactory } from '@splitsoftware/js-commons';
 const log = logFactory('splitio-settings');
 
 function validImpressionsMode(impressionsMode) {

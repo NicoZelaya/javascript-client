@@ -1,4 +1,4 @@
-import logFactory from '../../../utils/logger';
+import { logFactory } from '@splitsoftware/js-commons';
 import { isString } from '../../../utils/lang';
 const log = logFactory('splitio-settings');
 

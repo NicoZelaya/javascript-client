@@ -1,5 +1,5 @@
 import { isObject, shallowClone, isString, numberIsFinite, isBoolean } from '../lang';
-import logFactory from '../logger';
+import { logFactory } from '@splitsoftware/js-commons';
 const log = logFactory('');
 
 const ECMA_SIZES = {

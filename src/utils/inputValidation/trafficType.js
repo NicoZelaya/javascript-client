@@ -1,7 +1,7 @@
 import { isString } from '../lang';
 import thenable from '../promise/thenable';
 import { LOCALHOST_MODE } from '../constants';
-import logFactory from '../logger';
+import { logFactory } from '@splitsoftware/js-commons';
 const log = logFactory('');
 
 const CAPITAL_LETTERS_REGEX = /[A-Z]/;

@@ -2,7 +2,7 @@ import {
   isObject, isString, numberIsFinite,
   toString
 } from '../lang';
-import logFactory from '../logger';
+import { logFactory } from '@splitsoftware/js-commons';
 const log = logFactory('');
 
 const KEY_MAX_LENGTH = 250;

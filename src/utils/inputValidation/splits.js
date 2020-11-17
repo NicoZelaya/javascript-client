@@ -1,5 +1,5 @@
 import { uniq } from '../lang';
-import logFactory from '../logger';
+import { logFactory } from '@splitsoftware/js-commons';
 import { validateSplit } from './split';
 const log = logFactory('');
 

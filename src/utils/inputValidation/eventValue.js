@@ -1,5 +1,5 @@
 import { numberIsFinite } from '../lang';
-import logFactory from '../logger';
+import { logFactory } from '@splitsoftware/js-commons';
 const log = logFactory('');
 
 export function validateEventValue(maybeValue, method) {

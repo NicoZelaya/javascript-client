@@ -1,6 +1,6 @@
 import { STANDALONE_MODE, FILTERS_METADATA } from '../constants';
 import { validateSplits } from './splits';
-import logFactory from '../logger';
+import { logFactory } from '@splitsoftware/js-commons';
 const log = logFactory('');
 
 function validateFilterType(filterType) {
