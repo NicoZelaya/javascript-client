@@ -69,8 +69,9 @@ const configSamples = [
 const postEndpoints = [
   '/events/bulk',
   '/testImpressions/bulk',
-  '/metrics/times',
-  '/metrics/counters'
+  // @TODO uncomment when telemetry is implemented
+  // '/metrics/times',
+  // '/metrics/counters'
 ];
 
 export default function ipAddressesSettingAssertions(fetchMock, assert) {

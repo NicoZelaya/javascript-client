@@ -6,13 +6,17 @@ import { syncManagerFactoryOnlineCS } from '@splitsoftware/js-commons/cjs/sync/s
 import { InLocalStorageCSFactory } from '@splitsoftware/js-commons/cjs/storages/inLocalStorage/index';
 import { InMemoryStorageCSFactory } from '@splitsoftware/js-commons/cjs/storages/inMemory/InMemoryStorageCS';
 import { sdkManagerFactory } from '@splitsoftware/js-commons/cjs/sdkManager/index';
-import clientMethodFactoryCS from '@splitsoftware/js-commons/cjs/sdkClient/clientMethodCS';
+import { clientMethodCSFactory } from '@splitsoftware/js-commons/cjs/sdkClient/clientMethodCS';
 import BrowserSignalListener from '@splitsoftware/js-commons/cjs/listeners/browser';
-import impressionsObserverFactory from '@splitsoftware/js-commons/cjs/trackers/impressionObserver/clientSideObserver';
+import { clientSideObserverFactory } from '@splitsoftware/js-commons/cjs/trackers/impressionObserver/clientSideObserver';
+import integrationsManagerFactory from '@splitsoftware/js-commons/cjs/integrations/browser';
 
 import getFetch from '../services/getFetch';
 import getEventSource from '../services/getEventSource';
 import getOptions from '../services/request/options';
+import { shouldAddPt, shouldBeOptimized } from './commons';
+import objectAssign from 'object-assign';
+import { getMatching } from '@splitsoftware/js-commons/cjs/utils/key';
 
 const browserPlatform = {
   getFetch,
@@ -28,7 +32,13 @@ const syncManagerFactoryOfflineCSBrowser = syncManagerFactoryOfflineCS.bind(null
  */
 export function getModules(settings) {
 
-
+  const storageFactoryParams = {
+    eventsQueueSize: settings.scheduler.eventsQueueSize,
+    debugImpressionsMode: shouldBeOptimized(settings) ? false : true,
+    // @TODO add dataloader
+    dataLoader: undefined,
+  };
+  const matchingKey = getMatching(settings.core.key);
 
   return {
     settings,
@@ -37,20 +47,25 @@ export function getModules(settings) {
 
 
     platform: browserPlatform,
-    storageFactory: settings.storage.type === 'LOCALSTORAGE' ? InLocalStorageCSFactory : InMemoryStorageCSFactory,
+    storageFactory: settings.storage.type === 'LOCALSTORAGE' ?
+      InLocalStorageCSFactory.bind(null, objectAssign(storageFactoryParams, {
+        matchingKey,
+        prefix: settings.storage.prefix,
+        splitFiltersValidation: settings.sync.__splitFiltersValidation,
+      })) :
+      InMemoryStorageCSFactory.bind(null, storageFactoryParams),
+
 
     splitApiFactory: settings.mode === 'localhost' ? undefined : splitApiFactory,
     syncManagerFactory: settings.mode === 'localhost' ? syncManagerFactoryOfflineCSBrowser : syncManagerFactoryOnlineCS,
 
     sdkManagerFactory,
-    sdkClientMethodFactory: clientMethodFactoryCS,
+    sdkClientMethodFactory: clientMethodCSFactory,
     SignalListener: settings.mode === 'localhost' ? undefined : BrowserSignalListener,
     impressionListener: settings.impressionListener,
 
-    // @TODO add integrations
-    integrations: undefined,
-    // @TODO add dataloader
-    dataLoader: undefined,
-    impressionsObserverFactory: settings.sync.impressionsMode === 'OPTIMIZED' ? impressionsObserverFactory : undefined,
+    integrationsManagerFactory: settings.integrations && settings.integrations.length > 0 ? integrationsManagerFactory.bind(null, settings.integrations) : undefined,
+
+    impressionsObserverFactory: shouldAddPt(settings) ? clientSideObserverFactory : undefined,
   };
 }
