@@ -24,7 +24,7 @@ import integrations from './integrations';
 import mode from './mode';
 import validateSplitFilters from '../inputValidation/splitFilters';
 import { API } from '@splitsoftware/js-commons';
-import { STANDALONE_MODE, STORAGE_MEMORY, CONSUMER_MODE, OPTIMIZED } from '../../utils/constants';
+import { STANDALONE_MODE, STORAGE_MEMORY, CONSUMER_MODE, OPTIMIZED, LOCALHOST_MODE } from '../../utils/constants';
 import packageJSON from '../../../package.json';
 import validImpressionsMode from './impressionsMode';
 
@@ -149,6 +149,11 @@ function defaults(custom) {
 
   setupLogger(withDefaults.debug);
 
+  // Although `key` is mandatory according to TS declaration files, it can be omitted in LOCALHOST mode. In that case, the value `localhost_key` is used.
+  if (withDefaults.mode === LOCALHOST_MODE && withDefaults.core.key === undefined) {
+    withDefaults.core.key = 'localhost_key';
+  }
+
   // Current ip/hostname information
   withDefaults.runtime = runtime(withDefaults.core.IPAddressesEnabled, withDefaults.mode === CONSUMER_MODE);
 
@@ -196,24 +201,6 @@ const proto = {
     return `${this.urls.sdk}${target}`;
   },
 
-  /**
-   * Returns a settings clone with the key and traffic type (if provided) overriden.
-   * @param {SplitKey} key
-   * @param {string} [trafficType]
-   */
-  overrideKeyAndTT(key, trafficType) {
-    return objectAssign(
-      Object.create(proto),
-      this, {
-        core: objectAssign({},
-          this.core, {
-            key,
-            trafficType
-          }
-        )
-      }
-    );
-  }
 };
 
 const SettingsFactory = (settings) => objectAssign(Object.create(proto), defaults(settings));
