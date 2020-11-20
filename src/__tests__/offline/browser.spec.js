@@ -47,7 +47,8 @@ tape('Browser offline mode', function (assert) {
 
   const config = {
     core: {
-      key: 'some_key',
+      // Although `key` is mandatory according to TypeScript declaration files,
+      // it can be omitted in LOCALHOST mode. In that case, the value `localhost_key` is used.
       authorizationKey: 'localhost'
     },
     scheduler: {
