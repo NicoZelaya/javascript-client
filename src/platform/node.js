@@ -5,13 +5,14 @@ import { syncManagerFactoryOnline } from '@splitsoftware/js-commons/cjs/sync/syn
 import { InRedisStorageFactory } from '@splitsoftware/js-commons/cjs/storages/inRedis/index';
 import { InMemoryStorageFactory } from '@splitsoftware/js-commons/cjs/storages/inMemory/InMemoryStorage';
 import { sdkManagerFactory } from '@splitsoftware/js-commons/cjs/sdkManager/index';
-import clientMethodFactory from '@splitsoftware/js-commons/cjs/sdkClient/clientMethod';
+import { clientMethodFactory } from '@splitsoftware/js-commons/cjs/sdkClient/clientMethod';
 import NodeSignalListener from '@splitsoftware/js-commons/cjs/listeners/node';
-import impressionsObserverFactory from '@splitsoftware/js-commons/cjs/trackers/impressionObserver/serverSideObserver';
+import { serverSideObserverFactory } from '@splitsoftware/js-commons/cjs/trackers/impressionObserver/serverSideObserver';
 
 import getFetch from '../services/getFetch';
 import getEventSource from '../services/getEventSource';
 import getOptions from '../services/request/options';
+import { shouldAddPt, shouldBeOptimized } from './commons';
 
 const nodePlatform = {
   getOptions,
@@ -33,7 +34,14 @@ export function getModules(settings) {
 
 
     platform: nodePlatform,
-    storageFactory: settings.storage.type === 'REDIS' ? InRedisStorageFactory : InMemoryStorageFactory,
+    storageFactory: settings.storage.type === 'REDIS' ?
+      InRedisStorageFactory :
+      InMemoryStorageFactory.bind(null, {
+        eventsQueueSize: settings.scheduler.eventsQueueSize,
+        debugImpressionsMode: shouldBeOptimized(settings) ? false : true,
+        // @TODO add dataloader
+        dataLoader: undefined,
+      }),
 
     splitApiFactory: settings.mode === 'localhost' ? undefined : splitApiFactory,
     syncManagerFactory: settings.mode === 'localhost' ? syncManagerFactoryOfflineNode : syncManagerFactoryOnline,
@@ -43,10 +51,6 @@ export function getModules(settings) {
     SignalListener: settings.mode === 'localhost' ? undefined : NodeSignalListener,
     impressionListener: settings.impressionListener,
 
-    // @TODO add integrations
-    integrations: undefined,
-    // @TODO add dataloader
-    dataLoader: undefined,
-    impressionsObserverFactory: settings.sync.impressionsMode === 'OPTIMIZED' ? impressionsObserverFactory : undefined,
+    impressionsObserverFactory: shouldAddPt(settings) ? serverSideObserverFactory : undefined,
   };
 }
