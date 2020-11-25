@@ -319,7 +319,7 @@ export default function (fetchMock, assert) {
 
   });
 
-  // Split ready before GA initialized
+  // Split created before GA initialized
   assert.test(t => {
 
     const logSpy = sinon.spy(console, 'log');
@@ -334,13 +334,13 @@ export default function (fetchMock, assert) {
           const sentHitsDefault = window.gaSpy.getHits();
 
           t.equal(sentImpressions, numOfEvaluations, 'Number of impressions equals the number of evaluations');
-          t.equal(sentHitsDefault.length, 0, 'No hits sent if ga initialized after Split');
+          t.equal(sentHitsDefault.length, numOfEvaluations, 'Hits sent if ga initialized before Split evaluation (client.getTreatment***)');
 
           setTimeout(() => {
-            t.ok(logSpy.calledWith('[WARN]  splitio-split-to-ga => `ga` command queue not found. No hits will be sent.'));
-            client.destroy();
-            logSpy.restore();
-            t.end();
+            client.destroy().then(() => {
+              logSpy.restore();
+              t.end();
+            });
           });
         });
       });
@@ -353,6 +353,8 @@ export default function (fetchMock, assert) {
       ...config,
       debug: true,
     });
+    t.ok(logSpy.calledWith('[WARN]  splitio-split-to-ga => `ga` command queue not found. No hits will be sent until it is available.'), 'warning GA not found');
+
     client = factory.client();
     client.ready().then(() => {
       for (let i = 0; i < numOfEvaluations; i++)
