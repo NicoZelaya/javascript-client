@@ -117,18 +117,3 @@ export function testNoEventSource(fetchMock, assert) {
   window.EventSource = originalEventSource;
 
 }
-
-export function testNoBase64Support(fetchMock, assert) {
-  assert.plan(3);
-
-  const originalAtoB = window.atob;
-  window.atob = undefined;
-  fetchMock.getOnce(settings.url(`/auth?users=${encodeURIComponent(userKey)}`), function () {
-    assert.fail('not authenticate if `atob` or `btoa` functions are not available');
-  });
-
-  testInitializationFail(fetchMock, assert, false);
-
-  window.atob = originalAtoB;
-
-}
