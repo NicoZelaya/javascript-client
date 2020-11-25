@@ -1,7 +1,6 @@
 import { splitApiFactory } from '@splitsoftware/js-commons/cjs/services/splitApi';
 import splitsParserFromSettings from '@splitsoftware/js-commons/cjs/sync/offline/splitsParser/splitsParserFromSettings';
 import { syncManagerFactoryOfflineCS } from '@splitsoftware/js-commons/cjs/sync/syncManagerFactoryOfflineCS';
-// @TODO implement
 import { syncManagerFactoryOnlineCS } from '@splitsoftware/js-commons/cjs/sync/syncManagerFactoryOnlineCS';
 import { InLocalStorageCSFactory } from '@splitsoftware/js-commons/cjs/storages/inLocalStorage/index';
 import { InMemoryStorageCSFactory } from '@splitsoftware/js-commons/cjs/storages/inMemory/InMemoryStorageCS';

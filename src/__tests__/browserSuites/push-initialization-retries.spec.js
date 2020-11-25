@@ -7,7 +7,7 @@ import mySegmentsNicolasMock from '../mocks/mysegments.nicolas@split.io.json';
 
 import { nearlyEqual } from '../testUtils';
 
-import EventSourceMock, { setMockListener } from '../../sync/__tests__/mocks/eventSourceMock';
+import EventSourceMock, { setMockListener } from '../testUtils/eventSourceMock';
 
 import { SplitFactory } from '../../index';
 import SettingsFactory from '../../utils/settings';

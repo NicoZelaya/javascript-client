@@ -29,13 +29,21 @@ const syncManagerFactoryOfflineNode = syncManagerFactoryOffline.bind(null, split
 export function getModules(settings) {
   return {
     settings,
-    // @TODO add type to ISettings
+    // @TODO add type to ISettings?
     filterQueryString: settings.sync.__splitFiltersValidation.queryString,
 
 
     platform: nodePlatform,
     storageFactory: settings.storage.type === 'REDIS' ?
-      InRedisStorageFactory :
+      InRedisStorageFactory.bind(null, {
+        prefix: settings.storage.prefix,
+        metadata: {
+          version: settings.version,
+          ip: settings.runtime.ip,
+          hostname: settings.runtime.hostname
+        },
+        options: settings.storage.options
+      }) :
       InMemoryStorageFactory.bind(null, {
         eventsQueueSize: settings.scheduler.eventsQueueSize,
         debugImpressionsMode: shouldBeOptimized(settings) ? false : true,
@@ -44,7 +52,7 @@ export function getModules(settings) {
       }),
 
     splitApiFactory: settings.mode === 'localhost' ? undefined : splitApiFactory,
-    syncManagerFactory: settings.mode === 'localhost' ? syncManagerFactoryOfflineNode : syncManagerFactoryOnline,
+    syncManagerFactory: settings.storage.type === 'REDIS' ? undefined : settings.mode === 'localhost' ? syncManagerFactoryOfflineNode : syncManagerFactoryOnline,
 
     sdkManagerFactory,
     sdkClientMethodFactory: clientMethodFactory,

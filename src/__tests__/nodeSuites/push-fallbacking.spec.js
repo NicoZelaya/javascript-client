@@ -23,7 +23,7 @@ import authPushEnabled from '../mocks/auth.pushEnabled.node.json';
 
 import { nearlyEqual, mockSegmentChanges } from '../testUtils';
 
-import EventSourceMock, { setMockListener } from '../../sync/__tests__/mocks/eventSourceMock';
+import EventSourceMock, { setMockListener } from '../testUtils/eventSourceMock';
 import { __setEventSource } from '../../services/getEventSource/node';
 
 import { SplitFactory } from '../../index';

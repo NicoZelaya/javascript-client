@@ -3,7 +3,7 @@ import fetchMock from './testUtils/fetchMock';
 import evaluationsSuite from './browserSuites/evaluations.spec';
 import impressionsSuite from './browserSuites/impressions.spec';
 import impressionsSuiteDebug from './browserSuites/impressions.debug.spec';
-import metricsSuite from './browserSuites/metrics.spec';
+// import metricsSuite from './browserSuites/metrics.spec';
 import impressionsListenerSuite from './browserSuites/impressions-listener.spec';
 import readinessSuite from './browserSuites/readiness.spec';
 import readyFromCache from './browserSuites/ready-from-cache.spec';
@@ -105,7 +105,8 @@ tape('## E2E CI Tests ##', function(assert) {
   /* Check impression listener */
   assert.test('E2E / Impression listener', impressionsListenerSuite);
   /* Check metrics */
-  assert.test('E2E / Metrics', metricsSuite.bind(null, fetchMock));
+  // @TODO uncomment when telemetry is implemented
+  // assert.test('E2E / Metrics', metricsSuite.bind(null, fetchMock));
   /* Check events */
   assert.test('E2E / Events', withoutBindingTT.bind(null, fetchMock));
   assert.test('E2E / Events with TT binded', bindingTT.bind(null, fetchMock));

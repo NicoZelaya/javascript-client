@@ -12,10 +12,10 @@ import splitKillMessage from '../mocks/message.SPLIT_KILL.1457552650000.json';
 import authPushEnabledNicolas from '../mocks/auth.pushEnabled.nicolas@split.io.json';
 
 import { nearlyEqual } from '../testUtils';
-import Backoff from '../../utils/backoff';
+import Backoff from '@splitsoftware/js-commons/cjs/utils/Backoff';
 
 // Replace original EventSource with mock
-import EventSourceMock, { setMockListener } from '../../sync/__tests__/mocks/eventSourceMock';
+import EventSourceMock, { setMockListener } from '../testUtils/eventSourceMock';
 window.EventSource = EventSourceMock;
 
 import { SplitFactory } from '../../index';
