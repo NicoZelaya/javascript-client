@@ -1,11 +1,13 @@
 import { splitApiFactory } from '@splitsoftware/js-commons/cjs/services/splitApi';
 import splitsParserFromFile from '@splitsoftware/js-commons/cjs/sync/offline/splitsParser/splitsParserFromFile';
-import { syncManagerFactoryOffline } from '@splitsoftware/js-commons/cjs/sync/syncManagerFactoryOffline';
-import { syncManagerFactoryOnline } from '@splitsoftware/js-commons/cjs/sync/syncManagerFactoryOnline';
+import { syncManagerOfflineFactory } from '@splitsoftware/js-commons/cjs/sync/syncManagerOffline';
+import { syncManagerOnlineFactory } from '@splitsoftware/js-commons/cjs/sync/syncManagerOnline';
+import pushManagerFactory from '@splitsoftware/js-commons/cjs/sync/pushManager/pushManager';
+import pollingManagerServerSideFactory from '@splitsoftware/js-commons/cjs/sync/polling/pollingManagerServerSide';
 import { InRedisStorageFactory } from '@splitsoftware/js-commons/cjs/storages/inRedis/index';
 import { InMemoryStorageFactory } from '@splitsoftware/js-commons/cjs/storages/inMemory/InMemoryStorage';
 import { sdkManagerFactory } from '@splitsoftware/js-commons/cjs/sdkManager/index';
-import { clientMethodFactory } from '@splitsoftware/js-commons/cjs/sdkClient/clientMethod';
+import { sdkClientMethodFactory } from '@splitsoftware/js-commons/cjs/sdkClient/sdkClientMethod';
 import NodeSignalListener from '@splitsoftware/js-commons/cjs/listeners/node';
 import { serverSideObserverFactory } from '@splitsoftware/js-commons/cjs/trackers/impressionObserver/serverSideObserver';
 
@@ -20,7 +22,8 @@ const nodePlatform = {
   getEventSource,
 };
 
-const syncManagerFactoryOfflineNode = syncManagerFactoryOffline.bind(null, splitsParserFromFile);
+const syncManagerOfflineNodeFactory = syncManagerOfflineFactory(splitsParserFromFile);
+const syncManagerOnlineSSFactory = syncManagerOnlineFactory(pollingManagerServerSideFactory, pushManagerFactory);
 
 /**
  *
@@ -52,10 +55,10 @@ export function getModules(settings) {
       }),
 
     splitApiFactory: settings.mode === 'localhost' ? undefined : splitApiFactory,
-    syncManagerFactory: settings.storage.type === 'REDIS' ? undefined : settings.mode === 'localhost' ? syncManagerFactoryOfflineNode : syncManagerFactoryOnline,
+    syncManagerFactory: settings.storage.type === 'REDIS' ? undefined : settings.mode === 'localhost' ? syncManagerOfflineNodeFactory : syncManagerOnlineSSFactory,
 
     sdkManagerFactory,
-    sdkClientMethodFactory: clientMethodFactory,
+    sdkClientMethodFactory: sdkClientMethodFactory,
     SignalListener: settings.mode === 'localhost' ? undefined : NodeSignalListener,
     impressionListener: settings.impressionListener,
 

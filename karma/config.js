@@ -52,9 +52,11 @@ module.exports = {
 
   webpack: {
     mode: 'production',
+
     /** Uncomment to debug with source files */
     // mode: 'development',
     // devtool: 'inline-source-map',
+
     module: {
       rules: [
         {
@@ -68,7 +70,9 @@ module.exports = {
                 'targets': {
                   'ie': '10',
                   'node': '6'
-                }
+                },
+                // Required for CJS build with TSC: https://babeljs.io/docs/en/babel-preset-env/#modules
+                'modules': 'commonjs'
               }]],
               plugins: [['@babel/plugin-transform-runtime', {
                 // default values
