@@ -2,14 +2,14 @@ import { splitApiFactory } from '@splitsoftware/js-commons/cjs/services/splitApi
 import splitsParserFromSettings from '@splitsoftware/js-commons/cjs/sync/offline/splitsParser/splitsParserFromSettings';
 import { syncManagerOfflineFactory } from '@splitsoftware/js-commons/cjs/sync/syncManagerOffline';
 import { syncManagerOnlineFactory } from '@splitsoftware/js-commons/cjs/sync/syncManagerOnline';
-import pushManagerFactory from '@splitsoftware/js-commons/cjs/sync/pushManager/pushManager';
-import pollingManagerClientSideFactory from '@splitsoftware/js-commons/cjs/sync/polling/pollingManagerClientSide';
+import pushManagerFactory from '@splitsoftware/js-commons/cjs/sync/streaming/pushManager';
+import pollingManagerCSFactory from '@splitsoftware/js-commons/cjs/sync/polling/pollingManagerCS';
 import { InLocalStorageCSFactory } from '@splitsoftware/js-commons/cjs/storages/inLocalStorage/index';
 import { InMemoryStorageCSFactory } from '@splitsoftware/js-commons/cjs/storages/inMemory/InMemoryStorageCS';
 import { sdkManagerFactory } from '@splitsoftware/js-commons/cjs/sdkManager/index';
 import { sdkClientMethodCSFactory } from '@splitsoftware/js-commons/cjs/sdkClient/sdkClientMethodCS';
 import BrowserSignalListener from '@splitsoftware/js-commons/cjs/listeners/browser';
-import { clientSideObserverFactory } from '@splitsoftware/js-commons/cjs/trackers/impressionObserver/clientSideObserver';
+import { impressionObserverCSFactory } from '@splitsoftware/js-commons/cjs/trackers/impressionObserver/impressionObserverCS';
 import integrationsManagerFactory from '@splitsoftware/js-commons/cjs/integrations/browser';
 
 import getFetch from '../services/getFetch';
@@ -26,7 +26,7 @@ const browserPlatform = {
 };
 
 const syncManagerOfflineCSBrowserFactory = syncManagerOfflineFactory(splitsParserFromSettings);
-const syncManagerOnlineCSFactory = syncManagerOnlineFactory(pollingManagerClientSideFactory, pushManagerFactory);
+const syncManagerOnlineCSFactory = syncManagerOnlineFactory(pollingManagerCSFactory, pushManagerFactory);
 
 /**
  *
@@ -68,6 +68,6 @@ export function getModules(settings) {
 
     integrationsManagerFactory: settings.integrations && settings.integrations.length > 0 ? integrationsManagerFactory.bind(null, settings.integrations) : undefined,
 
-    impressionsObserverFactory: shouldAddPt(settings) ? clientSideObserverFactory : undefined,
+    impressionsObserverFactory: shouldAddPt(settings) ? impressionObserverCSFactory : undefined,
   };
 }

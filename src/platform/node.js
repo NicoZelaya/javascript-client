@@ -2,14 +2,14 @@ import { splitApiFactory } from '@splitsoftware/js-commons/cjs/services/splitApi
 import splitsParserFromFile from '@splitsoftware/js-commons/cjs/sync/offline/splitsParser/splitsParserFromFile';
 import { syncManagerOfflineFactory } from '@splitsoftware/js-commons/cjs/sync/syncManagerOffline';
 import { syncManagerOnlineFactory } from '@splitsoftware/js-commons/cjs/sync/syncManagerOnline';
-import pushManagerFactory from '@splitsoftware/js-commons/cjs/sync/pushManager/pushManager';
-import pollingManagerServerSideFactory from '@splitsoftware/js-commons/cjs/sync/polling/pollingManagerServerSide';
+import pushManagerFactory from '@splitsoftware/js-commons/cjs/sync/streaming/pushManager';
+import pollingManagerSSFactory from '@splitsoftware/js-commons/cjs/sync/polling/pollingManagerSS';
 import { InRedisStorageFactory } from '@splitsoftware/js-commons/cjs/storages/inRedis/index';
 import { InMemoryStorageFactory } from '@splitsoftware/js-commons/cjs/storages/inMemory/InMemoryStorage';
 import { sdkManagerFactory } from '@splitsoftware/js-commons/cjs/sdkManager/index';
 import { sdkClientMethodFactory } from '@splitsoftware/js-commons/cjs/sdkClient/sdkClientMethod';
 import NodeSignalListener from '@splitsoftware/js-commons/cjs/listeners/node';
-import { serverSideObserverFactory } from '@splitsoftware/js-commons/cjs/trackers/impressionObserver/serverSideObserver';
+import { impressionObserverSSFactory } from '@splitsoftware/js-commons/cjs/trackers/impressionObserver/impressionObserverSS';
 
 import getFetch from '../services/getFetch';
 import getEventSource from '../services/getEventSource';
@@ -23,7 +23,7 @@ const nodePlatform = {
 };
 
 const syncManagerOfflineNodeFactory = syncManagerOfflineFactory(splitsParserFromFile);
-const syncManagerOnlineSSFactory = syncManagerOnlineFactory(pollingManagerServerSideFactory, pushManagerFactory);
+const syncManagerOnlineSSFactory = syncManagerOnlineFactory(pollingManagerSSFactory, pushManagerFactory);
 
 /**
  *
@@ -62,6 +62,6 @@ export function getModules(settings) {
     SignalListener: settings.mode === 'localhost' ? undefined : NodeSignalListener,
     impressionListener: settings.impressionListener,
 
-    impressionsObserverFactory: shouldAddPt(settings) ? serverSideObserverFactory : undefined,
+    impressionsObserverFactory: shouldAddPt(settings) ? impressionObserverSSFactory : undefined,
   };
 }
