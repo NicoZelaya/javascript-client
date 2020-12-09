@@ -26,7 +26,7 @@ import authPushEnabledNicolasAndMarcio from '../mocks/auth.pushEnabled.nicolas@s
 
 import { nearlyEqual } from '../testUtils';
 
-import EventSourceMock, { setMockListener } from '../../sync/__tests__/mocks/eventSourceMock';
+import EventSourceMock, { setMockListener } from '../testUtils/eventSourceMock';
 window.EventSource = EventSourceMock;
 
 import { SplitFactory } from '../../index';

@@ -23,7 +23,7 @@ import storage from './storage';
 import integrations from './integrations';
 import mode from './mode';
 import validateSplitFilters from '../inputValidation/splitFilters';
-import { API } from '@splitsoftware/js-commons';
+import { API } from '@splitsoftware/js-commons/cjs/logger/sdkLogger';
 import { STANDALONE_MODE, STORAGE_MEMORY, CONSUMER_MODE, OPTIMIZED, LOCALHOST_MODE } from '../../utils/constants';
 import packageJSON from '../../../package.json';
 import validImpressionsMode from './impressionsMode';

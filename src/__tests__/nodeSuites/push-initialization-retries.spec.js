@@ -6,7 +6,7 @@ import authPushBadToken from '../mocks/auth.pushBadToken.json';
 
 import { nearlyEqual } from '../testUtils';
 
-import EventSourceMock, { setMockListener } from '../../sync/__tests__/mocks/eventSourceMock';
+import EventSourceMock, { setMockListener } from '../testUtils/eventSourceMock';
 import { __setEventSource } from '../../services/getEventSource/node';
 
 import { SplitFactory } from '../../index';
