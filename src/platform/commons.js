@@ -1,4 +1,3 @@
-// @TODO move with setting validation
 import { OPTIMIZED, PRODUCER_MODE, STANDALONE_MODE } from '@splitsoftware/js-commons/cjs/utils/constants';
 
 /**
