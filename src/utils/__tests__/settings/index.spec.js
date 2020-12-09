@@ -15,11 +15,11 @@ limitations under the License.
 **/
 import _ from 'lodash';
 import tape from 'tape-catch';
-import SettingsFactory from '../../settings';
-import { OPTIMIZED, DEBUG } from '../../constants';
+import settingsFactory from '../../settings/browser';
+import { OPTIMIZED, DEBUG } from '@splitsoftware/js-commons/cjs/utils/constants';
 
 tape('SETTINGS / check defaults', assert => {
-  const settings = SettingsFactory({
+  const settings = settingsFactory({
     core: {
       authorizationKey: 'dummy token'
     }
@@ -36,7 +36,7 @@ tape('SETTINGS / check defaults', assert => {
 });
 
 tape('SETTINGS / override with defaults', assert => {
-  const settings = SettingsFactory({
+  const settings = settingsFactory({
     core: {
       authorizationKey: 'dummy token'
     },
@@ -50,7 +50,7 @@ tape('SETTINGS / override with defaults', assert => {
 });
 
 tape('SETTINGS / impressionsMode should be configurable', assert => {
-  const settings = SettingsFactory({
+  const settings = settingsFactory({
     core: {
       authorizationKey: 'dummy token'
     },
@@ -63,63 +63,6 @@ tape('SETTINGS / impressionsMode should be configurable', assert => {
   assert.end();
 });
 
-tape('SETTINGS / key and traffic type should be overwritable', assert => {
-  const settings = SettingsFactory({
-    core: {
-      authorizationKey: 'dummy token',
-      key: 'start_key'
-    }
-  });
-
-  assert.equal(settings.core.key, 'start_key', 'When creating a setting instance, it will have the provided value for key');
-  assert.equal(settings.core.trafficType, undefined, 'and if no traffic type was provided, it will be undefined.');
-
-  const settings2 = settings.overrideKeyAndTT('second_key');
-
-  assert.notEqual(settings, settings2, 'If we call overrideKeyAndTT we get a new settings instance');
-  assert.equal(settings2.core.key, 'second_key', 'with the key overriden by the value passed to it.');
-  assert.equal(settings2.core.trafficType, undefined, 'As no traffic type was provided, it will still be undefined.');
-
-  assert.deepEqual({
-    ...settings,
-    core: {
-      ...settings.core,
-      key: 'second_key',
-      trafficType: undefined
-    }
-  }, settings2, 'Of course, the new instance should match with the origin settings on every property but the overriden key.');
-
-  const settings3 = settings.overrideKeyAndTT('third_key', 'myTT');
-
-  assert.equal(settings3.core.key, 'third_key', 'If we call overrideKeyAndTT with both key and traffic type, new instance has key overriden as before');
-  assert.equal(settings3.core.trafficType, 'myTT', 'and as we provided a traffic type, we have that traffic type now.');
-
-  assert.deepEqual({
-    ...settings,
-    core: {
-      ...settings.core,
-      key: 'third_key',
-      trafficType: 'myTT'
-    }
-  }, settings3, 'Of course, the new instance should match with the origin settings on every property but the overriden key and trafficType.');
-
-  const settings4 = settings3.overrideKeyAndTT('fourth_key');
-
-  assert.equal(settings4.core.key, 'fourth_key', 'If we call overrideKeyAndTT with only key and NO traffic type, new instance has key overriden as before');
-  assert.equal(settings4.core.trafficType, undefined, 'but traffic type should be blanked. (new key may be different tt)');
-
-  assert.deepEqual({
-    ...settings3,
-    core: {
-      ...settings3.core,
-      key: 'fourth_key',
-      trafficType: undefined
-    }
-  }, settings4, 'Of course, the new instance should match with the origin settings on every property but the overriden key and trafficType.');
-
-  assert.end();
-});
-
 tape('SETTINGS / urls should be configurable', assert => {
   const urls = {
     sdk: 'sdk-url',
@@ -128,7 +71,7 @@ tape('SETTINGS / urls should be configurable', assert => {
     streaming: 'streaming-url',
   };
 
-  const settings = SettingsFactory({
+  const settings = settingsFactory({
     core: {
       authorizationKey: 'dummy token'
     },
@@ -154,7 +97,7 @@ tape('SETTINGS / required properties should be always present', assert => {
   const locatorStartupRetriesOnFailureBeforeReady = _.property('startup.retriesOnFailureBeforeReady');
   const locatorStartupReadyTimeout = _.property('startup.readyTimeout');
 
-  const settings = SettingsFactory({
+  const settings = settingsFactory({
     core: {
       authorizationKey: 'dummy token'
     },
@@ -193,7 +136,7 @@ tape('SETTINGS / required properties should be always present', assert => {
 });
 
 tape('SETTINGS / urls should be correctly assigned', assert => {
-  const settings = SettingsFactory({
+  const settings = settingsFactory({
     core: {
       authorizationKey: 'dummy token'
     }
