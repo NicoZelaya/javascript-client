@@ -3,7 +3,7 @@ import { SplitFactory } from '../..';
 import SettingsFactory from '../../utils/settings';
 import splitChangesMock1 from '../mocks/splitchanges.since.-1.json';
 import mySegmentsFacundo from '../mocks/mysegments.facundo@split.io.json';
-import { DEBUG } from '../../utils/constants';
+import { DEBUG } from '@splitsoftware/js-commons/cjs/utils/constants';
 
 const config = {
   core: {
