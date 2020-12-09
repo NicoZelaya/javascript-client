@@ -13,7 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 **/
-import { LOCALHOST_MODE, STORAGE_MEMORY, STORAGE_REDIS } from '../../constants';
+import { LOCALHOST_MODE, STORAGE_MEMORY } from '@splitsoftware/js-commons/cjs/utils/constants';
+
+const STORAGE_REDIS = 'REDIS';
 
 const ParseStorageSettings = (settings) => {
   let {

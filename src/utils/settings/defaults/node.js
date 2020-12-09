@@ -1,3 +1,6 @@
+import packageJSON from '../../../../package.json';
+const { version } = packageJSON;
+
 export default {
   core: {
     // Default is true.
@@ -17,5 +20,8 @@ export default {
     featuresRefreshRate: 5,
     impressionsRefreshRate: 300
   },
-  features: '.split'
+  features: '.split',
+
+  // Instance version.
+  version: `nodejs-${version}`,
 };
