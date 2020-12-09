@@ -2,8 +2,8 @@ import sinon from 'sinon';
 import { SplitFactory } from '../..';
 import SettingsFactory from '../../utils/settings';
 import { gaSpy, gaTag, removeGaTag, addGaTag } from './gaTestUtils';
-import { SPLIT_IMPRESSION, SPLIT_EVENT } from '../../utils/constants';
-import { DEBUG } from '../../utils/constants';
+import { SPLIT_IMPRESSION, SPLIT_EVENT } from '@splitsoftware/js-commons/cjs/utils/constants';
+import { DEBUG } from '@splitsoftware/js-commons/cjs/utils/constants';
 
 function countImpressions(parsedImpressionsBulkPayload) {
   return parsedImpressionsBulkPayload

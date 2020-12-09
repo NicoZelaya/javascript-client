@@ -1,7 +1,7 @@
 import { SplitFactory } from '../..';
 import SettingsFactory from '../../utils/settings';
 import splitChangesMock1 from '../mocks/splitchanges.since.-1.json';
-import { DEBUG } from '../../utils/constants';
+import { DEBUG } from '@splitsoftware/js-commons/cjs/utils/constants';
 
 // Header keys and expected values. Expected values are obtained with the runtime function evaluated with IPAddressesEnabled in true.
 const HEADER_SPLITSDKMACHINEIP = 'SplitSDKMachineIP';
