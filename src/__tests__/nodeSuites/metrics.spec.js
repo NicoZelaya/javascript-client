@@ -2,7 +2,7 @@ import { SplitFactory } from '../../';
 import SettingsFactory from '../../utils/settings';
 import splitChangesMock1 from '../mocks/splitchanges.since.-1.json';
 import splitChangesMock2 from '../mocks/splitchanges.since.1457552620999.json';
-import { OPTIMIZED } from '@splitsoftware/js-commons/cjs/utils/constants';
+import { OPTIMIZED } from '@splitsoftware/js-commons/src/utils/constants';
 
 const baseUrls = {
   sdk: 'https://sdk.baseurl/metricsSuite',

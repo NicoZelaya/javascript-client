@@ -8,8 +8,8 @@ import RedisServer from 'redis-server';
 import RedisClient from 'ioredis';
 import { exec } from 'child_process';
 import { SplitFactory } from '../';
-import { merge } from '@splitsoftware/js-commons/cjs/utils/lang';
-import KeyBuilderSS from '@splitsoftware/js-commons/cjs/storages/KeyBuilderSS';
+import { merge } from '@splitsoftware/js-commons/src/utils/lang';
+import KeyBuilderSS from '@splitsoftware/js-commons/src/storages/KeyBuilderSS';
 import SettingsFactory from '../utils/settings';
 import { nearlyEqual } from './testUtils';
 

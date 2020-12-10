@@ -17,7 +17,7 @@ limitations under the License.
 import osFunction from 'os';
 import ipFunction from 'ip';
 
-import { UNKNOWN, NA, CONSUMER_MODE } from '@splitsoftware/js-commons/cjs/utils/constants';
+import { UNKNOWN, NA, CONSUMER_MODE } from '@splitsoftware/js-commons/src/utils/constants';
 
 export default function(settings) {
   const isIPAddressesEnabled = settings.core.IPAddressesEnabled === true;

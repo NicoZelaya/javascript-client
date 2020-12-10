@@ -16,7 +16,7 @@ limitations under the License.
 import _ from 'lodash';
 import tape from 'tape-catch';
 import settingsFactory from '../../settings/browser';
-import { OPTIMIZED, DEBUG } from '@splitsoftware/js-commons/cjs/utils/constants';
+import { OPTIMIZED, DEBUG } from '@splitsoftware/js-commons/src/utils/constants';
 
 tape('SETTINGS / check defaults', assert => {
   const settings = settingsFactory({

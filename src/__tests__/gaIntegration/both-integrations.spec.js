@@ -2,7 +2,7 @@ import { SplitFactory } from '../..';
 import SettingsFactory from '../../utils/settings';
 import { gaSpy, gaTag } from './gaTestUtils';
 import includes from 'lodash/includes';
-import { DEBUG } from '@splitsoftware/js-commons/cjs/utils/constants';
+import { DEBUG } from '@splitsoftware/js-commons/src/utils/constants';
 
 function countImpressions(parsedImpressionsBulkPayload) {
   return parsedImpressionsBulkPayload

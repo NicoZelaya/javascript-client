@@ -16,8 +16,8 @@ limitations under the License.
 
 import { logFactory } from '@splitsoftware/js-commons';
 const log = logFactory('splitio-settings');
-import { isLocalStorageAvailable } from '@splitsoftware/js-commons/cjs/utils/env/isLocalStorageAvailable';
-import { LOCALHOST_MODE, STORAGE_MEMORY } from '@splitsoftware/js-commons/cjs/utils/constants';
+import { isLocalStorageAvailable } from '@splitsoftware/js-commons/src/utils/env/isLocalStorageAvailable';
+import { LOCALHOST_MODE, STORAGE_MEMORY } from '@splitsoftware/js-commons/src/utils/constants';
 
 const STORAGE_LOCALSTORAGE = 'LOCALSTORAGE';
 

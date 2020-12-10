@@ -1,4 +1,4 @@
-import { settingsValidation } from '@splitsoftware/js-commons/cjs/utils/settings';
+import { settingsValidation } from '@splitsoftware/js-commons/src/utils/settings';
 import defaults from './defaults/node';
 import storageValidation from './storage/node';
 import runtimeValidation from './runtime/node';

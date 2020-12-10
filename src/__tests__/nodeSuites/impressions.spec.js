@@ -1,10 +1,10 @@
 import { SplitFactory } from '../../';
 import SettingsFactory from '../../utils/settings';
-import { SDK_NOT_READY } from '@splitsoftware/js-commons/cjs/utils/labels';
+import { SDK_NOT_READY } from '@splitsoftware/js-commons/src/utils/labels';
 import splitChangesMock1 from '../mocks/splitchanges.since.-1.json';
 import splitChangesMock2 from '../mocks/splitchanges.since.1457552620999.json';
-import { OPTIMIZED } from '@splitsoftware/js-commons/cjs/utils/constants';
-import { truncateTimeFrame } from '@splitsoftware/js-commons/cjs/utils/time';
+import { OPTIMIZED } from '@splitsoftware/js-commons/src/utils/constants';
+import { truncateTimeFrame } from '@splitsoftware/js-commons/src/utils/time';
 
 const baseUrls = {
   sdk: 'https://sdk.baseurl/impressionsSuite',
