@@ -17,11 +17,11 @@ module.exports = function (api) {
           'ie': '10',
           'node': '6'
         }
-      }]);
+      }], '@babel/preset-typescript');
       plugins.push(['@babel/plugin-transform-runtime', {
         'useESModules': false, // default value: use helpers that get run through @babel/plugin-transform-modules-commonjs
-        'corejs': false // default value: use `@babel/runtime` that doesn't have built-in polyfills
-      }]);
+        'corejs': false, // default value: use `@babel/runtime` that doesn't have built-in polyfills
+      }], '@babel/plugin-proposal-class-properties');
       break;
 
     default: // es6 build
@@ -32,11 +32,11 @@ module.exports = function (api) {
           'ie': '10',
           'node': '6'
         }
-      }]);
+      }], '@babel/preset-typescript');
       plugins.push(['@babel/plugin-transform-runtime', {
         'useESModules': true, // use helpers that not get run through @babel/plugin-transform-modules-commonjs
         'corejs': false // default value: use `@babel/runtime` that doesn't have built-in polyfills
-      }]);
+      }], '@babel/plugin-proposal-class-properties');
       break;
   }
 

@@ -3,6 +3,10 @@ module.exports = {
     split: ['./src/umd']
   },
 
+  resolve: {
+    extensions: ['.ts', '.js']
+  },
+
   output: {
     path: __dirname + '/umd',
     library: 'splitio',
@@ -13,7 +17,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(ts|js)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -24,7 +28,7 @@ module.exports = {
                 'ie': '10',
                 'node': '6'
               }
-            }]],
+            }], '@babel/preset-typescript'],
             plugins: [['@babel/plugin-transform-runtime', {
               // default values
               'absoluteRuntime': false,
@@ -32,7 +36,7 @@ module.exports = {
               'regenerator': true,
               'useESModules': false,
               'helpers': true,
-            }]]
+            }], '@babel/plugin-proposal-class-properties']
           }
         }
       }
