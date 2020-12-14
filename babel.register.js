@@ -2,5 +2,5 @@
 // https://babeljs.io/docs/en/babel-register
 require('@babel/register')({
   extensions: ['.js', '.ts'], // `babel` doesn't consider .ts files by default
-  ignore: [/node_modules[/](?!@splitsoftware)/], // `@babel/register` ignores node_modules by default
+  ignore: [/node_modules[/](?!@splitsoftware)/], // ignore transpiling node_modules except @splitsoftware (`@babel/register` ignores node_modules by default)
 });

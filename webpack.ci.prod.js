@@ -1,5 +1,5 @@
 const merge = require('webpack-merge');
-const common = require('./webpack.common.js');
+const common = require('./webpack.common.babel.js');
 const pkg = require('./package.json');
 
 const VERSION = pkg.version;

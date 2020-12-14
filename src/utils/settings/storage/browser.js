@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 **/
 
-import { logFactory } from '@splitsoftware/js-commons';
+import { logFactory } from '@splitsoftware/js-commons/src/logger/sdkLogger';
 const log = logFactory('splitio-settings');
 import { isLocalStorageAvailable } from '@splitsoftware/js-commons/src/utils/env/isLocalStorageAvailable';
 import { LOCALHOST_MODE, STORAGE_MEMORY } from '@splitsoftware/js-commons/src/utils/constants';

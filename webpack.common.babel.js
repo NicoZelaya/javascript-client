@@ -1,6 +1,9 @@
 module.exports = {
   entry: {
-    split: ['./src/umd']
+    split: ['./src/umd'],
+    'split-min-online': ['./src/umdMinimalOnline'],
+    'split-min-offline': ['./src/umdMinimalOffline'],
+    'split-min': ['./src/umdMinimal'],
   },
 
   resolve: {
@@ -8,7 +11,7 @@ module.exports = {
   },
 
   output: {
-    path: __dirname + '/umd',
+    path: __dirname + '/umd-webpack-babel',
     library: 'splitio',
     libraryTarget: 'umd',
     libraryExport: 'default'
