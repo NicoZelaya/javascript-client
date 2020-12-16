@@ -1,7 +1,7 @@
 import { SplitFactory } from '../..';
 import SettingsFactory from '../../utils/settings';
 import splitChangesMock1 from '../mocks/splitchanges.since.-1.json';
-import { DEBUG } from '@splitsoftware/js-commons/cjs/utils/constants';
+import { DEBUG } from '@splitsoftware/js-commons/src/utils/constants';
 import { url } from '../testUtils';
 
 // Header keys and expected values. Expected values are obtained with the runtime function evaluated with IPAddressesEnabled in true.

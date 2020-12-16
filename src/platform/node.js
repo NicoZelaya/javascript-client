@@ -1,15 +1,15 @@
-import { splitApiFactory } from '@splitsoftware/js-commons/cjs/services/splitApi';
-import splitsParserFromFile from '@splitsoftware/js-commons/cjs/sync/offline/splitsParser/splitsParserFromFile';
-import { syncManagerOfflineFactory } from '@splitsoftware/js-commons/cjs/sync/syncManagerOffline';
-import { syncManagerOnlineFactory } from '@splitsoftware/js-commons/cjs/sync/syncManagerOnline';
-import pushManagerFactory from '@splitsoftware/js-commons/cjs/sync/streaming/pushManager';
-import pollingManagerSSFactory from '@splitsoftware/js-commons/cjs/sync/polling/pollingManagerSS';
-import { InRedisStorageFactory } from '@splitsoftware/js-commons/cjs/storages/inRedis/index';
-import { InMemoryStorageFactory } from '@splitsoftware/js-commons/cjs/storages/inMemory/InMemoryStorage';
-import { sdkManagerFactory } from '@splitsoftware/js-commons/cjs/sdkManager/index';
-import { sdkClientMethodFactory } from '@splitsoftware/js-commons/cjs/sdkClient/sdkClientMethod';
-import NodeSignalListener from '@splitsoftware/js-commons/cjs/listeners/node';
-import { impressionObserverSSFactory } from '@splitsoftware/js-commons/cjs/trackers/impressionObserver/impressionObserverSS';
+import { splitApiFactory } from '@splitsoftware/js-commons/src/services/splitApi';
+import splitsParserFromFile from '@splitsoftware/js-commons/src/sync/offline/splitsParser/splitsParserFromFile';
+import { syncManagerOfflineFactory } from '@splitsoftware/js-commons/src/sync/syncManagerOffline';
+import { syncManagerOnlineFactory } from '@splitsoftware/js-commons/src/sync/syncManagerOnline';
+import pushManagerFactory from '@splitsoftware/js-commons/src/sync/streaming/pushManager';
+import pollingManagerSSFactory from '@splitsoftware/js-commons/src/sync/polling/pollingManagerSS';
+import { InRedisStorageFactory } from '@splitsoftware/js-commons/src/storages/inRedis/index';
+import { InMemoryStorageFactory } from '@splitsoftware/js-commons/src/storages/inMemory/InMemoryStorage';
+import { sdkManagerFactory } from '@splitsoftware/js-commons/src/sdkManager/index';
+import { sdkClientMethodFactory } from '@splitsoftware/js-commons/src/sdkClient/sdkClientMethod';
+import NodeSignalListener from '@splitsoftware/js-commons/src/listeners/node';
+import { impressionObserverSSFactory } from '@splitsoftware/js-commons/src/trackers/impressionObserver/impressionObserverSS';
 
 import getFetch from '../services/getFetch';
 import getEventSource from '../services/getEventSource';

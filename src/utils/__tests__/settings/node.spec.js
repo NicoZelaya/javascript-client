@@ -17,7 +17,7 @@ import tape from 'tape-catch';
 import osFunction from 'os';
 import ipFunction from 'ip';
 import settingsFactory from '../../settings/node';
-import { CONSUMER_MODE, NA } from '@splitsoftware/js-commons/cjs/utils/constants';
+import { CONSUMER_MODE, NA } from '@splitsoftware/js-commons/src/utils/constants';
 
 const IP_VALUE = ipFunction.address();
 const HOSTNAME_VALUE = osFunction.hostname();

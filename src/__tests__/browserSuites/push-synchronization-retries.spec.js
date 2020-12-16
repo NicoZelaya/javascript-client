@@ -12,7 +12,7 @@ import splitKillMessage from '../mocks/message.SPLIT_KILL.1457552650000.json';
 import authPushEnabledNicolas from '../mocks/auth.pushEnabled.nicolas@split.io.json';
 
 import { nearlyEqual, url } from '../testUtils';
-import Backoff from '@splitsoftware/js-commons/cjs/utils/Backoff';
+import Backoff from '@splitsoftware/js-commons/src/utils/Backoff';
 
 // Replace original EventSource with mock
 import EventSourceMock, { setMockListener } from '../testUtils/eventSourceMock';

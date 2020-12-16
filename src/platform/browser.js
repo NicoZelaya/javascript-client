@@ -1,23 +1,23 @@
-import { splitApiFactory } from '@splitsoftware/js-commons/cjs/services/splitApi';
-import splitsParserFromSettings from '@splitsoftware/js-commons/cjs/sync/offline/splitsParser/splitsParserFromSettings';
-import { syncManagerOfflineFactory } from '@splitsoftware/js-commons/cjs/sync/syncManagerOffline';
-import { syncManagerOnlineFactory } from '@splitsoftware/js-commons/cjs/sync/syncManagerOnline';
-import pushManagerFactory from '@splitsoftware/js-commons/cjs/sync/streaming/pushManager';
-import pollingManagerCSFactory from '@splitsoftware/js-commons/cjs/sync/polling/pollingManagerCS';
-import { InLocalStorageCSFactory } from '@splitsoftware/js-commons/cjs/storages/inLocalStorage/index';
-import { InMemoryStorageCSFactory } from '@splitsoftware/js-commons/cjs/storages/inMemory/InMemoryStorageCS';
-import { sdkManagerFactory } from '@splitsoftware/js-commons/cjs/sdkManager/index';
-import { sdkClientMethodCSFactory } from '@splitsoftware/js-commons/cjs/sdkClient/sdkClientMethodCS';
-import BrowserSignalListener from '@splitsoftware/js-commons/cjs/listeners/browser';
-import { impressionObserverCSFactory } from '@splitsoftware/js-commons/cjs/trackers/impressionObserver/impressionObserverCS';
-import integrationsManagerFactory from '@splitsoftware/js-commons/cjs/integrations/browser';
+import { splitApiFactory } from '@splitsoftware/js-commons/src/services/splitApi';
+import splitsParserFromSettings from '@splitsoftware/js-commons/src/sync/offline/splitsParser/splitsParserFromSettings';
+import { syncManagerOfflineFactory } from '@splitsoftware/js-commons/src/sync/syncManagerOffline';
+import { syncManagerOnlineFactory } from '@splitsoftware/js-commons/src/sync/syncManagerOnline';
+import pushManagerFactory from '@splitsoftware/js-commons/src/sync/streaming/pushManager';
+import pollingManagerCSFactory from '@splitsoftware/js-commons/src/sync/polling/pollingManagerCS';
+import { InLocalStorageCSFactory } from '@splitsoftware/js-commons/src/storages/inLocalStorage/index';
+import { InMemoryStorageCSFactory } from '@splitsoftware/js-commons/src/storages/inMemory/InMemoryStorageCS';
+import { sdkManagerFactory } from '@splitsoftware/js-commons/src/sdkManager/index';
+import { sdkClientMethodCSFactory } from '@splitsoftware/js-commons/src/sdkClient/sdkClientMethodCS';
+import BrowserSignalListener from '@splitsoftware/js-commons/src/listeners/browser';
+import { impressionObserverCSFactory } from '@splitsoftware/js-commons/src/trackers/impressionObserver/impressionObserverCS';
+import integrationsManagerFactory from '@splitsoftware/js-commons/src/integrations/browser';
 
 import getFetch from '../services/getFetch';
 import getEventSource from '../services/getEventSource';
 import getOptions from '../services/request/options';
 import { shouldAddPt, shouldBeOptimized } from './commons';
 import objectAssign from 'object-assign';
-import { getMatching } from '@splitsoftware/js-commons/cjs/utils/key';
+import { getMatching } from '@splitsoftware/js-commons/src/utils/key';
 
 const browserPlatform = {
   getFetch,

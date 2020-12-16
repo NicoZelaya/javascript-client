@@ -3,7 +3,7 @@ import SettingsFactory from '../../utils/settings';
 import splitChangesMock1 from '../mocks/splitchanges.since.-1.json';
 import splitChangesMock2 from '../mocks/splitchanges.since.1457552620999.json';
 import mySegmentsFacundo from '../mocks/mysegments.facundo@split.io.json';
-import { DEBUG } from '@splitsoftware/js-commons/cjs/utils/constants';
+import { DEBUG } from '@splitsoftware/js-commons/src/utils/constants';
 import { url } from '../testUtils';
 
 const baseUrls = {
