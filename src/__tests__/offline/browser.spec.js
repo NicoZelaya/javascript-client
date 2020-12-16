@@ -1,6 +1,7 @@
 import tape from 'tape-catch';
 import sinon from 'sinon';
 import fetchMock from '../testUtils/fetchMock';
+import { url } from '../testUtils';
 import { SplitFactory } from '../../';
 import SettingsFactory from '../../utils/settings';
 
@@ -24,14 +25,14 @@ const replySpy = spy => {
 };
 
 const configMocks = () => {
-  fetchMock.mock(new RegExp(`${settings.url('/splitChanges/')}.*`), () => replySpy(spySplitChanges));
-  fetchMock.mock(new RegExp(`${settings.url('/segmentChanges/')}.*`), () => replySpy(spySegmentChanges));
-  fetchMock.mock(new RegExp(`${settings.url('/mySegments/')}.*`), () => replySpy(spyMySegments));
-  fetchMock.mock(settings.url('/events/bulk'), () => replySpy(spyEventsBulk));
-  fetchMock.mock(settings.url('/testImpressions/bulk'), () => replySpy(spyTestImpressionsBulk));
-  fetchMock.mock(settings.url('/testImpressions/count'), () => replySpy(spyTestImpressionsCount));
-  fetchMock.mock(settings.url('/metrics/times'), () => replySpy(spyMetricsTimes));
-  fetchMock.mock(settings.url('/metrics/counters'), () => replySpy(spyMetricsCounters));
+  fetchMock.mock(new RegExp(`${url(settings, '/splitChanges/')}.*`), () => replySpy(spySplitChanges));
+  fetchMock.mock(new RegExp(`${url(settings, '/segmentChanges/')}.*`), () => replySpy(spySegmentChanges));
+  fetchMock.mock(new RegExp(`${url(settings, '/mySegments/')}.*`), () => replySpy(spyMySegments));
+  fetchMock.mock(url(settings, '/events/bulk'), () => replySpy(spyEventsBulk));
+  fetchMock.mock(url(settings, '/testImpressions/bulk'), () => replySpy(spyTestImpressionsBulk));
+  fetchMock.mock(url(settings, '/testImpressions/count'), () => replySpy(spyTestImpressionsCount));
+  fetchMock.mock(url(settings, '/metrics/times'), () => replySpy(spyMetricsTimes));
+  fetchMock.mock(url(settings, '/metrics/counters'), () => replySpy(spyMetricsCounters));
   fetchMock.mock('*', () => replySpy(spyAny));
 };
 

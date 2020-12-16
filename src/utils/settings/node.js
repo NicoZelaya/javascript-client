@@ -1,12 +1,14 @@
 import { settingsValidation } from '@splitsoftware/js-commons/cjs/utils/settings';
 import defaults from './defaults/node';
-import storageValidation from './storage/node';
-import runtimeValidation from './runtime/node';
+import runtime from './runtime/node';
+import storage from './storage/node';
+import integrations from './integrations/node';
 
 const params = {
   defaults,
-  storageValidation,
-  runtimeValidation
+  runtime,
+  storage,
+  integrations
 };
 
 export default function nodeSettingsFactory(config) {

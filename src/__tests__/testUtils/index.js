@@ -38,3 +38,29 @@ export function mockSegmentChanges(fetchMock, matcher, keys, changeNumber = 1457
     };
   });
 }
+
+
+const eventsEndpointMatcher = /^\/(testImpressions|metrics|events)/;
+const authEndpointMatcher = /^\/auth/;
+const streamingEndpointMatcher = /^\/(sse|event-stream)/;
+
+/**
+ * Switch URLs servers based on target.
+ * Only used for testing purposes.
+ *
+ * @param {Object} settings settings object
+ * @param {String} target url path
+ * @return {String}  completed url
+ */
+export function url(settings, target) {
+  if (eventsEndpointMatcher.test(target)) {
+    return `${settings.urls.events}${target}`;
+  }
+  if (authEndpointMatcher.test(target)) {
+    return `${settings.urls.auth}${target}`;
+  }
+  if (streamingEndpointMatcher.test(target)) {
+    return `${settings.urls.streaming}${target}`;
+  }
+  return `${settings.urls.sdk}${target}`;
+}

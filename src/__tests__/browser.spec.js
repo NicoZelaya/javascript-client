@@ -1,5 +1,6 @@
 import tape from 'tape-catch';
 import fetchMock from './testUtils/fetchMock';
+import { url } from './testUtils';
 import evaluationsSuite from './browserSuites/evaluations.spec';
 import impressionsSuite from './browserSuites/impressions.spec';
 import impressionsSuiteDebug from './browserSuites/impressions.debug.spec';
@@ -87,13 +88,13 @@ tape('## E2E CI Tests ##', function(assert) {
   //If we change the mocks, we need to clear localstorage. Cleaning up after testing ensures "fresh data".
   localStorage.clear();
 
-  fetchMock.get(settings.url('/splitChanges?since=-1'), { status: 200, body: splitChangesMock1 });
-  fetchMock.get(settings.url('/splitChanges?since=1457552620999'), { status: 200, body: splitChangesMock2 });
-  fetchMock.get(settings.url('/mySegments/facundo%40split.io'), { status: 200, body: mySegmentsFacundo });
-  fetchMock.get(settings.url('/mySegments/nicolas%40split.io'), { status: 200, body: mySegmentsNicolas });
-  fetchMock.get(settings.url('/mySegments/marcio%40split.io'), { status: 200, body: mySegmentsMarcio });
-  fetchMock.post(settings.url('/testImpressions/bulk'), 200);
-  fetchMock.post(settings.url('/testImpressions/count'), 200);
+  fetchMock.get(url(settings, '/splitChanges?since=-1'), { status: 200, body: splitChangesMock1 });
+  fetchMock.get(url(settings, '/splitChanges?since=1457552620999'), { status: 200, body: splitChangesMock2 });
+  fetchMock.get(url(settings, '/mySegments/facundo%40split.io'), { status: 200, body: mySegmentsFacundo });
+  fetchMock.get(url(settings, '/mySegments/nicolas%40split.io'), { status: 200, body: mySegmentsNicolas });
+  fetchMock.get(url(settings, '/mySegments/marcio%40split.io'), { status: 200, body: mySegmentsMarcio });
+  fetchMock.post(url(settings, '/testImpressions/bulk'), 200);
+  fetchMock.post(url(settings, '/testImpressions/count'), 200);
 
   /* Check client evaluations. */
   assert.test('E2E / In Memory', evaluationsSuite.bind(null, configInMemory, fetchMock));
