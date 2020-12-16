@@ -3,7 +3,7 @@ import splitChangesMock2 from '../mocks/splitchanges.since.1457552620999.json';
 
 import authPushEnabled from '../mocks/auth.pushEnabled.node.601secs.json';
 
-import { nearlyEqual, mockSegmentChanges } from '../testUtils';
+import { nearlyEqual, mockSegmentChanges, url } from '../testUtils';
 
 import EventSourceMock, { setMockListener } from '../testUtils/eventSourceMock';
 import { __setEventSource } from '../../services/getEventSource/node';
@@ -46,7 +46,7 @@ export function testRefreshToken(fetchMock, assert) {
 
   // mock SSE open and message events
   setMockListener(function (eventSourceInstance) {
-    const expectedSSEurl = `${settings.url('/sse')}?channels=NzM2MDI5Mzc0_NDEzMjQ1MzA0Nw%3D%3D_segments,NzM2MDI5Mzc0_NDEzMjQ1MzA0Nw%3D%3D_splits,%5B%3Foccupancy%3Dmetrics.publishers%5Dcontrol_pri,%5B%3Foccupancy%3Dmetrics.publishers%5Dcontrol_sec&accessToken=${authPushEnabled.token}&v=1.1&heartbeats=true`;
+    const expectedSSEurl = `${url(settings, '/sse')}?channels=NzM2MDI5Mzc0_NDEzMjQ1MzA0Nw%3D%3D_segments,NzM2MDI5Mzc0_NDEzMjQ1MzA0Nw%3D%3D_splits,%5B%3Foccupancy%3Dmetrics.publishers%5Dcontrol_pri,%5B%3Foccupancy%3Dmetrics.publishers%5Dcontrol_sec&accessToken=${authPushEnabled.token}&v=1.1&heartbeats=true`;
     assert.equals(eventSourceInstance.url, expectedSSEurl, 'EventSource URL is the expected');
 
     setTimeout(() => {
@@ -56,20 +56,20 @@ export function testRefreshToken(fetchMock, assert) {
   });
 
   // initial split sync
-  fetchMock.getOnce(settings.url('/splitChanges?since=-1'), { status: 200, body: splitChangesMock1 });
+  fetchMock.getOnce(url(settings, '/splitChanges?since=-1'), { status: 200, body: splitChangesMock1 });
 
   // first auth
-  fetchMock.getOnce(settings.url('/auth'), function (url, opts) {
+  fetchMock.getOnce(url(settings, '/auth'), function (url, opts) {
     if (!opts.headers['Authorization']) assert.fail('`/auth` request must include `Authorization` header');
     assert.pass('auth success');
     return { status: 200, body: authPushEnabled };
   });
 
   // split sync after SSE opened
-  fetchMock.getOnce(settings.url('/splitChanges?since=1457552620999'), { status: 200, body: splitChangesMock2 });
+  fetchMock.getOnce(url(settings, '/splitChanges?since=1457552620999'), { status: 200, body: splitChangesMock2 });
 
   // re-auth due to refresh token
-  fetchMock.getOnce(settings.url('/auth'), function (url, opts) {
+  fetchMock.getOnce(url(settings, '/auth'), function (url, opts) {
     const lapse = Date.now() - start;
     assert.true(nearlyEqual(lapse, MILLIS_REFRESH_TOKEN), 'reauthentication for token refresh');
     if (!opts.headers['Authorization']) assert.fail('`/auth` request must include `Authorization` header');
@@ -77,14 +77,14 @@ export function testRefreshToken(fetchMock, assert) {
   });
 
   // split sync after SSE reopened
-  fetchMock.getOnce(settings.url('/splitChanges?since=1457552620999'), function () {
+  fetchMock.getOnce(url(settings, '/splitChanges?since=1457552620999'), function () {
     const lapse = Date.now() - start;
     assert.true(nearlyEqual(lapse, MILLIS_REFRESH_TOKEN + MILLIS_SSE_OPEN), 'sync after SSE connection is reopened');
     return { status: 200, body: { splits: [], since: 1457552620999, till: 1457552620999 } };
   });
 
   // second re-auth due to refresh token
-  fetchMock.getOnce(settings.url('/auth'), function (url, opts) {
+  fetchMock.getOnce(url(settings, '/auth'), function (url, opts) {
     const lapse = Date.now() - start;
     assert.true(nearlyEqual(lapse, MILLIS_REFRESH_TOKEN * 2), 'second reauthentication for token refresh');
     if (!opts.headers['Authorization']) assert.fail('`/auth` request must include `Authorization` header');
@@ -92,7 +92,7 @@ export function testRefreshToken(fetchMock, assert) {
   });
 
   // split sync after SSE reopened
-  fetchMock.getOnce(settings.url('/splitChanges?since=1457552620999'), function () {
+  fetchMock.getOnce(url(settings, '/splitChanges?since=1457552620999'), function () {
     const lapse = Date.now() - start;
     assert.true(nearlyEqual(lapse, MILLIS_REFRESH_TOKEN * 2 + MILLIS_SSE_OPEN), 'sync after SSE connection is reopened a second time');
     client.destroy().then(() => {
@@ -101,7 +101,7 @@ export function testRefreshToken(fetchMock, assert) {
     return { status: 500, body: 'server error' };
   });
 
-  mockSegmentChanges(fetchMock, new RegExp(`${settings.url('/segmentChanges')}/*`), [key]);
+  mockSegmentChanges(fetchMock, new RegExp(`${url(settings, '/segmentChanges')}/*`), [key]);
 
   fetchMock.get(new RegExp('.*'), function (url) {
     assert.fail('unexpected GET request with url: ' + url);

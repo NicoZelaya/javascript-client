@@ -4,6 +4,7 @@ import SettingsFactory from '../../utils/settings';
 import { gaSpy, gaTag, removeGaTag, addGaTag } from './gaTestUtils';
 import { SPLIT_IMPRESSION, SPLIT_EVENT } from '@splitsoftware/js-commons/src/utils/constants';
 import { DEBUG } from '@splitsoftware/js-commons/src/utils/constants';
+import { url } from '../testUtils';
 
 function countImpressions(parsedImpressionsBulkPayload) {
   return parsedImpressionsBulkPayload
@@ -48,7 +49,7 @@ export default function (fetchMock, assert) {
       });
     })();
 
-    fetchMock.postOnce(settings.url('/testImpressions/bulk'), (url, opts) => {
+    fetchMock.postOnce(url(settings, '/testImpressions/bulk'), (url, opts) => {
       // we can assert payload and ga hits, once ga is ready and after `SplitToGa.queue`, that is timeout wrapped, make to the queue stack.
       setTimeout(() => {
         window.ga(() => {
@@ -65,7 +66,7 @@ export default function (fetchMock, assert) {
       return 200;
     });
 
-    fetchMock.postOnce(settings.url('/events/bulk'), (url, opts) => {
+    fetchMock.postOnce(url(settings, '/events/bulk'), (url, opts) => {
       // @TODO review why it is not working with a delay of 0
       setTimeout(() => {
         window.ga(() => {
@@ -106,7 +107,7 @@ export default function (fetchMock, assert) {
     let client;
     const numOfEvaluations = 4;
 
-    fetchMock.postOnce(settings.url('/testImpressions/bulk'), (url, opts) => {
+    fetchMock.postOnce(url(settings, '/testImpressions/bulk'), (url, opts) => {
       setTimeout(() => {
         window.other_location_for_ga(() => {
           const resp = JSON.parse(opts.body);
@@ -173,7 +174,7 @@ export default function (fetchMock, assert) {
       });
     })();
 
-    fetchMock.postOnce(settings.url('/testImpressions/bulk'), (url, opts) => {
+    fetchMock.postOnce(url(settings, '/testImpressions/bulk'), (url, opts) => {
       setTimeout(() => {
         window.ga(() => {
           const resp = JSON.parse(opts.body);
@@ -190,7 +191,7 @@ export default function (fetchMock, assert) {
       return 200;
     });
 
-    fetchMock.postOnce(settings.url('/events/bulk'), (url, opts) => {
+    fetchMock.postOnce(url(settings, '/events/bulk'), (url, opts) => {
       // @TODO review why it is not working with a delay of 0
       setTimeout(() => {
         window.ga(() => {
@@ -261,7 +262,7 @@ export default function (fetchMock, assert) {
     let client;
     const numOfEvaluations = 1;
 
-    fetchMock.postOnce(settings.url('/testImpressions/bulk'), (url, opts) => {
+    fetchMock.postOnce(url(settings, '/testImpressions/bulk'), (url, opts) => {
       setTimeout(() => {
         window.ga(() => {
           const resp = JSON.parse(opts.body);
@@ -326,7 +327,7 @@ export default function (fetchMock, assert) {
     let client;
     const numOfEvaluations = 1;
 
-    fetchMock.postOnce(settings.url('/testImpressions/bulk'), (url, opts) => {
+    fetchMock.postOnce(url(settings, '/testImpressions/bulk'), (url, opts) => {
       setTimeout(() => {
         window.ga(() => {
           const resp = JSON.parse(opts.body);
@@ -384,7 +385,7 @@ export default function (fetchMock, assert) {
       });
     })();
 
-    fetchMock.postOnce(settings.url('/testImpressions/bulk'), (url, opts) => {
+    fetchMock.postOnce(url(settings, '/testImpressions/bulk'), (url, opts) => {
       // we can assert payload and ga hits, once ga is ready and after `SplitToGa.queue`, that is timeout wrapped, make to the queue stack.
       setTimeout(() => {
         window.ga(() => {
@@ -401,7 +402,7 @@ export default function (fetchMock, assert) {
       return 200;
     });
 
-    fetchMock.postOnce(settings.url('/events/bulk'), (url, opts) => {
+    fetchMock.postOnce(url(settings, '/events/bulk'), (url, opts) => {
       setTimeout(() => {
         window.ga(() => {
           const resp = JSON.parse(opts.body);

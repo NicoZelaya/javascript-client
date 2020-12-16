@@ -1,14 +1,14 @@
 import { settingsValidation } from '@splitsoftware/js-commons/src/utils/settings';
 import defaults from './defaults/browser';
-import storageValidation from './storage/browser';
-import runtimeValidation from './runtime/browser';
-import integrationsValidation from './integrations/browser';
+import runtime from './runtime/browser';
+import storage from './storage/browser';
+import integrations from './integrations/browser';
 
 const params = {
   defaults,
-  storageValidation,
-  runtimeValidation,
-  integrationsValidation
+  runtime,
+  storage,
+  integrations
 };
 
 export default function browserSettingsFactory(config) {
