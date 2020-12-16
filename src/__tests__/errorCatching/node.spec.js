@@ -2,6 +2,7 @@
 import tape from 'tape';
 import includes from 'lodash/includes';
 import fetchMock from '../testUtils/fetchMock';
+import { url } from '../testUtils';
 
 import { SplitFactory } from '../../';
 import SettingsFactory from '../../utils/settings';
@@ -20,9 +21,9 @@ const settings = SettingsFactory({
   streamingEnabled: false
 });
 
-fetchMock.get(settings.url('/splitChanges?since=-1'), { status: 200, body: splitChangesMock1 }, responseDelay);
-fetchMock.get(settings.url('/splitChanges?since=1500492097547'), { status: 200, body: splitChangesMock2 }, responseDelay);
-fetchMock.get(settings.url('/splitChanges?since=1500492297547'), { status: 200, body: splitChangesMock3 }, responseDelay);
+fetchMock.get(url(settings, '/splitChanges?since=-1'), { status: 200, body: splitChangesMock1 }, responseDelay);
+fetchMock.get(url(settings, '/splitChanges?since=1500492097547'), { status: 200, body: splitChangesMock2 }, responseDelay);
+fetchMock.get(url(settings, '/splitChanges?since=1500492297547'), { status: 200, body: splitChangesMock3 }, responseDelay);
 
 
 tape('Error catching on callbacks', assert => {

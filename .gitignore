@@ -20,7 +20,7 @@
 ## transpiled code
 /lib
 /es
-/umd
+/umd*
 
 ## TS tests compilated files
 /ts-tests/*.js

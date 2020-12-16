@@ -3,6 +3,7 @@ import SettingsFactory from '../../utils/settings';
 import splitChangesMock1 from '../mocks/splitchanges.since.-1.json';
 import splitChangesMock2 from '../mocks/splitchanges.since.1457552620999.json';
 import { DEBUG } from '@splitsoftware/js-commons/cjs/utils/constants';
+import { url } from '../testUtils';
 
 const baseUrls = {
   sdk: 'https://sdk.baseurl/impressionsSuite',
@@ -39,15 +40,15 @@ const config = {
 
 export default async function(key, fetchMock, assert) {
   // Mocking this specific route to make sure we only get the items we want to test from the handlers.
-  fetchMock.getOnce(settings.url('/splitChanges?since=-1'), { status: 200, body: splitChangesMock1 });
-  fetchMock.get(settings.url('/splitChanges?since=1457552620999'), { status: 200, body: splitChangesMock2 });
-  fetchMock.get(new RegExp(`${settings.url('/segmentChanges/')}.*`), { status: 200, body: {since:10, till:10, name: 'segmentName', added: [], removed: []} });
+  fetchMock.getOnce(url(settings, '/splitChanges?since=-1'), { status: 200, body: splitChangesMock1 });
+  fetchMock.get(url(settings, '/splitChanges?since=1457552620999'), { status: 200, body: splitChangesMock2 });
+  fetchMock.get(new RegExp(`${url(settings, '/segmentChanges/')}.*`), { status: 200, body: {since:10, till:10, name: 'segmentName', added: [], removed: []} });
 
   const splitio = SplitFactory(config);
   const client = splitio.client();
   let evaluationsStart = 0, readyEvaluationsStart = 0, evaluationsEnd = 0;
 
-  fetchMock.postOnce(settings.url('/testImpressions/bulk'), (url, opts) => {
+  fetchMock.postOnce(url(settings, '/testImpressions/bulk'), (url, opts) => {
     assert.equal(opts.headers.SplitSDKImpressionsMode, DEBUG);
     const data = JSON.parse(opts.body);
 
@@ -87,7 +88,7 @@ export default async function(key, fetchMock, assert) {
 
     return 200;
   });
-  fetchMock.postOnce(settings.url('/testImpressions/bulk'), 200);
+  fetchMock.postOnce(url(settings, '/testImpressions/bulk'), 200);
 
   splitio.Logger.enable();
   evaluationsStart = Date.now();

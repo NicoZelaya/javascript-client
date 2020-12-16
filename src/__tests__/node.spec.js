@@ -1,5 +1,6 @@
 import tape from 'tape-catch';
 import fetchMock from './testUtils/fetchMock';
+import { url } from './testUtils';
 import SettingsFactory from '../utils/settings';
 
 import evaluationsSuite from './nodeSuites/evaluations.spec';
@@ -40,9 +41,9 @@ const config = {
 
 const key = 'facundo@split.io';
 
-fetchMock.get(settings.url('/splitChanges?since=-1'), { status: 200, body: splitChangesMock1 });
-fetchMock.get(settings.url('/splitChanges?since=1457552620999'), { status: 200, body: splitChangesMock2 });
-fetchMock.get(new RegExp(`${settings.url('/segmentChanges')}/*`), {
+fetchMock.get(url(settings, '/splitChanges?since=-1'), { status: 200, body: splitChangesMock1 });
+fetchMock.get(url(settings, '/splitChanges?since=1457552620999'), { status: 200, body: splitChangesMock2 });
+fetchMock.get(new RegExp(`${url(settings, '/segmentChanges')}/*`), {
   status: 200, body: {
     'name': 'segment',
     'added': [],
@@ -51,8 +52,8 @@ fetchMock.get(new RegExp(`${settings.url('/segmentChanges')}/*`), {
     'till': 1
   }
 });
-fetchMock.post(settings.url('/testImpressions/bulk'), 200);
-fetchMock.post(settings.url('/testImpressions/count'), 200);
+fetchMock.post(url(settings, '/testImpressions/bulk'), 200);
+fetchMock.post(url(settings, '/testImpressions/count'), 200);
 
 tape('## Node JS - E2E CI Tests ##', async function (assert) {
   /* Check client evaluations. */
