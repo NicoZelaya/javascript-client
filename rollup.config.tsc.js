@@ -7,6 +7,7 @@ import ts from '@wessberg/rollup-plugin-ts';
 import { terser } from 'rollup-plugin-terser';
 import nodePolyfills from 'rollup-plugin-node-polyfills';
 import pkg from './package.json';
+import visualizer from 'rollup-plugin-visualizer';
 
 const VERSION = pkg.version;
 
@@ -55,9 +56,15 @@ const createRollupConfig = (input, outputPrefix) => ({
     format: 'umd', // `umd` works as `cjs`, `iife` and `amd` all in one
     name: 'splitio',  // umd format requires a name
     file: `umd-rollup-tsc/${outputPrefix}-${VERSION}.min.js`,
-    // @TODO include sourcemaps or not?
-    // sourcemap: true,
-    plugins: [terser()]
+    // Including sourcemap to use the rollup vizualizer over the minified bundle
+    sourcemap: true,
+    plugins: [
+      terser(),
+      visualizer({
+        filename: `stats/rollup-tsc-${outputPrefix}-${VERSION}.min.html`,
+        sourcemap: true
+      })
+    ]
   }],
   plugins
 });
