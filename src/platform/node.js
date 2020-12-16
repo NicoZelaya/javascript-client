@@ -32,11 +32,9 @@ const syncManagerOnlineSSFactory = syncManagerOnlineFactory(pollingManagerSSFact
 export function getModules(settings) {
   return {
     settings,
-    // @TODO add type to ISettings?
-    filterQueryString: settings.sync.__splitFiltersValidation.queryString,
-
 
     platform: nodePlatform,
+
     storageFactory: settings.storage.type === 'REDIS' ?
       InRedisStorageFactory.bind(null, {
         prefix: settings.storage.prefix,

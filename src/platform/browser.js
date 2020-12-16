@@ -44,11 +44,9 @@ export function getModules(settings) {
 
   return {
     settings,
-    // @TODO consider adding it to ISettings
-    filterQueryString: settings.sync.__splitFiltersValidation.queryString,
-
 
     platform: browserPlatform,
+
     storageFactory: settings.storage.type === 'LOCALSTORAGE' ?
       InLocalStorageCSFactory.bind(null, objectAssign(storageFactoryParams, {
         matchingKey,
