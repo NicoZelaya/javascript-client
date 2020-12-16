@@ -103,22 +103,3 @@ tape('SETTINGS / IPAddressesEnabled should be overwritable and true by default',
 
   assert.end();
 });
-
-tape('SETTINGS / streamingEnabled should be overwritable and true by default', assert => {
-  const settingsWithStreamingDisabled = settingsFactory({
-    core: {
-      authorizationKey: 'dummy token',
-    },
-    streamingEnabled: false
-  });
-  const settingsWithStreamingEnabled = settingsFactory({
-    core: {
-      authorizationKey: 'dummy token'
-    }
-  });
-
-  assert.equal(settingsWithStreamingDisabled.streamingEnabled, false, 'When creating a setting instance, it will have the provided value for streamingEnabled');
-  assert.equal(settingsWithStreamingEnabled.streamingEnabled, true, 'If streamingEnabled is not provided, it will be true.');
-
-  assert.end();
-});
