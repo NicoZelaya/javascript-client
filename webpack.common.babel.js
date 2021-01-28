@@ -1,10 +1,17 @@
 module.exports = {
   entry: {
-    split: ['./src/umd']
+    split: ['./src/umd'],
+    'split-min-online': ['./src/umdMinimalOnline'],
+    'split-min-offline': ['./src/umdMinimalOffline'],
+    'split-min': ['./src/umdMinimal'],
+  },
+
+  resolve: {
+    extensions: ['.ts', '.js']
   },
 
   output: {
-    path: __dirname + '/umd',
+    path: __dirname + '/umd-webpack-babel',
     library: 'splitio',
     libraryTarget: 'umd',
     libraryExport: 'default'
@@ -13,7 +20,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(ts|js)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -24,7 +31,7 @@ module.exports = {
                 'ie': '10',
                 'node': '6'
               }
-            }]],
+            }], '@babel/preset-typescript'],
             plugins: [['@babel/plugin-transform-runtime', {
               // default values
               'absoluteRuntime': false,
@@ -32,7 +39,7 @@ module.exports = {
               'regenerator': true,
               'useESModules': false,
               'helpers': true,
-            }]]
+            }], '@babel/plugin-proposal-class-properties']
           }
         }
       }

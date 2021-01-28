@@ -57,10 +57,14 @@ module.exports = {
     // mode: 'development',
     // devtool: 'inline-source-map',
 
+    resolve: {
+      extensions: ['.ts', '.js']
+    },
+
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.(ts|js)$/,
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
@@ -73,7 +77,7 @@ module.exports = {
                 },
                 // Required for CJS build with TSC: https://babeljs.io/docs/en/babel-preset-env/#modules
                 'modules': 'commonjs'
-              }]],
+              }], '@babel/preset-typescript'],
               plugins: [['@babel/plugin-transform-runtime', {
                 // default values
                 'absoluteRuntime': false,
@@ -81,7 +85,7 @@ module.exports = {
                 'regenerator': true,
                 'useESModules': false,
                 'helpers': true
-              }]]
+              }], '@babel/plugin-proposal-class-properties']
             }
           }
         }
