@@ -5,7 +5,7 @@ import splitChangesMock2 from '../mocks/splitchanges.since.1457552620999.json';
 import mySegmentsNicolas from '../mocks/mysegments.nicolas@split.io.json';
 import authPushDisabled from '../mocks/auth.pushDisabled.json';
 import authInvalidCredentials from '../mocks/auth.invalidCredentials.txt';
-import { nearlyEqual } from '../testUtils';
+import { nearlyEqual, url } from '../testUtils';
 
 const baseUrls = {
   sdk: 'https://sdk.push-initialization-nopush/api',
@@ -42,15 +42,15 @@ const settings = SettingsFactory(config);
 function testInitializationFail(fetchMock, assert, fallbackToPolling) {
   let start, splitio, client, ready = false;
 
-  fetchMock.get(settings.url('/mySegments/nicolas%40split.io'), { status: 200, body: mySegmentsNicolas });
-  fetchMock.getOnce(settings.url('/splitChanges?since=-1'), function () {
+  fetchMock.get(url(settings, '/mySegments/nicolas%40split.io'), { status: 200, body: mySegmentsNicolas });
+  fetchMock.getOnce(url(settings, '/splitChanges?since=-1'), function () {
     const lapse = Date.now() - start;
     assert.true(nearlyEqual(lapse, 0), 'initial sync');
     return { status: 200, body: splitChangesMock1 };
   });
 
   if (fallbackToPolling) {
-    fetchMock.getOnce(settings.url('/splitChanges?since=1457552620999'), function () {
+    fetchMock.getOnce(url(settings, '/splitChanges?since=1457552620999'), function () {
       assert.true(ready, 'client ready');
       const lapse = Date.now() - start;
       assert.true(nearlyEqual(lapse, 0), 'polling (first fetch)');
@@ -58,7 +58,7 @@ function testInitializationFail(fetchMock, assert, fallbackToPolling) {
     });
   }
 
-  fetchMock.getOnce(settings.url('/splitChanges?since=1457552620999'), function () {
+  fetchMock.getOnce(url(settings, '/splitChanges?since=1457552620999'), function () {
     assert.true(ready, 'client ready');
     const lapse = Date.now() - start;
     assert.true(nearlyEqual(lapse, settings.scheduler.featuresRefreshRate), 'polling (second fetch)');
@@ -80,7 +80,7 @@ function testInitializationFail(fetchMock, assert, fallbackToPolling) {
 export function testAuthWithPushDisabled(fetchMock, assert) {
   assert.plan(6);
 
-  fetchMock.getOnce(settings.url(`/auth?users=${encodeURIComponent(userKey)}`), function (url, opts) {
+  fetchMock.getOnce(url(settings, `/auth?users=${encodeURIComponent(userKey)}`), function (url, opts) {
     if (!opts.headers['Authorization']) assert.fail('`/auth` request must include `Authorization` header');
     assert.pass('auth');
     return { status: 200, body: authPushDisabled };
@@ -93,7 +93,7 @@ export function testAuthWithPushDisabled(fetchMock, assert) {
 export function testAuthWith401(fetchMock, assert) {
   assert.plan(6);
 
-  fetchMock.getOnce(settings.url(`/auth?users=${encodeURIComponent(userKey)}`), function (url, opts) {
+  fetchMock.getOnce(url(settings, `/auth?users=${encodeURIComponent(userKey)}`), function (url, opts) {
     if (!opts.headers['Authorization']) assert.fail('`/auth` request must include `Authorization` header');
     assert.pass('auth');
     return { status: 401, body: authInvalidCredentials };
@@ -108,27 +108,12 @@ export function testNoEventSource(fetchMock, assert) {
 
   const originalEventSource = window.EventSource;
   window.EventSource = undefined;
-  fetchMock.getOnce(settings.url(`/auth?users=${encodeURIComponent(userKey)}`), function () {
+  fetchMock.getOnce(url(settings, `/auth?users=${encodeURIComponent(userKey)}`), function () {
     assert.fail('not authenticate if EventSource is not available');
   });
 
   testInitializationFail(fetchMock, assert, false);
 
   window.EventSource = originalEventSource;
-
-}
-
-export function testNoBase64Support(fetchMock, assert) {
-  assert.plan(3);
-
-  const originalAtoB = window.atob;
-  window.atob = undefined;
-  fetchMock.getOnce(settings.url(`/auth?users=${encodeURIComponent(userKey)}`), function () {
-    assert.fail('not authenticate if `atob` or `btoa` functions are not available');
-  });
-
-  testInitializationFail(fetchMock, assert, false);
-
-  window.atob = originalAtoB;
 
 }

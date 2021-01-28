@@ -14,14 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 **/
 
-import logFactory from '../../../utils/logger';
+import { logFactory } from '@splitsoftware/js-commons';
 const log = logFactory('splitio-settings');
-import isLocalStorageAvailable from '../../../utils/localstorage/isAvailable';
-import {
-  LOCALHOST_MODE,
-  STORAGE_MEMORY,
-  STORAGE_LOCALSTORAGE
-} from '../../../utils/constants';
+import { isLocalStorageAvailable } from '@splitsoftware/js-commons/src/utils/env/isLocalStorageAvailable';
+import { LOCALHOST_MODE, STORAGE_MEMORY } from '@splitsoftware/js-commons/src/utils/constants';
+
+const STORAGE_LOCALSTORAGE = 'LOCALSTORAGE';
 
 const ParseStorageSettings = settings => {
   let {

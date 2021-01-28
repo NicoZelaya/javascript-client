@@ -16,15 +16,14 @@ limitations under the License.
 import tape from 'tape-catch';
 import osFunction from 'os';
 import ipFunction from 'ip';
-import SettingsFactory from '../../settings';
-import { NA } from '../../constants';
-import { CONSUMER_MODE } from '../../../utils/constants';
+import settingsFactory from '../../settings/node';
+import { CONSUMER_MODE, NA } from '@splitsoftware/js-commons/src/utils/constants';
 
 const IP_VALUE = ipFunction.address();
 const HOSTNAME_VALUE = osFunction.hostname();
 
 tape('SETTINGS / Redis options should be properly parsed', assert => {
-  const settingsWithUrl = SettingsFactory({
+  const settingsWithUrl = settingsFactory({
     core: {
       authorizationKey: 'dummy token'
     },
@@ -40,7 +39,7 @@ tape('SETTINGS / Redis options should be properly parsed', assert => {
       prefix: 'test_prefix'
     }
   });
-  const settingsWithoutUrl = SettingsFactory({
+  const settingsWithoutUrl = settingsFactory({
     core: {
       authorizationKey: 'dummy token'
     },
@@ -68,25 +67,25 @@ tape('SETTINGS / Redis options should be properly parsed', assert => {
 });
 
 tape('SETTINGS / IPAddressesEnabled should be overwritable and true by default', assert => {
-  const settingsWithIPAddressDisabled = SettingsFactory({
+  const settingsWithIPAddressDisabled = settingsFactory({
     core: {
       authorizationKey: 'dummy token',
       IPAddressesEnabled: false
     }
   });
-  const settingsWithIPAddressEnabled = SettingsFactory({
+  const settingsWithIPAddressEnabled = settingsFactory({
     core: {
       authorizationKey: 'dummy token'
     }
   });
-  const settingsWithIPAddressDisabledAndConsumerMode = SettingsFactory({
+  const settingsWithIPAddressDisabledAndConsumerMode = settingsFactory({
     core: {
       authorizationKey: 'dummy token',
       IPAddressesEnabled: false
     },
     mode: CONSUMER_MODE
   });
-  const settingsWithIPAddressEnabledAndConsumerMode = SettingsFactory({
+  const settingsWithIPAddressEnabledAndConsumerMode = settingsFactory({
     core: {
       authorizationKey: 'dummy token'
     },
@@ -101,25 +100,6 @@ tape('SETTINGS / IPAddressesEnabled should be overwritable and true by default',
 
   assert.deepEqual({ ip: IP_VALUE, hostname: HOSTNAME_VALUE }, settingsWithIPAddressEnabled.runtime, 'When IP address is enabled, the runtime setting will have the current ip and hostname values.');
   assert.deepEqual({ ip: IP_VALUE, hostname: HOSTNAME_VALUE }, settingsWithIPAddressEnabledAndConsumerMode.runtime, 'When IP address is enabled, the runtime setting will have the current ip and hostname values.');
-
-  assert.end();
-});
-
-tape('SETTINGS / streamingEnabled should be overwritable and true by default', assert => {
-  const settingsWithStreamingDisabled = SettingsFactory({
-    core: {
-      authorizationKey: 'dummy token',
-    },
-    streamingEnabled: false
-  });
-  const settingsWithStreamingEnabled = SettingsFactory({
-    core: {
-      authorizationKey: 'dummy token'
-    }
-  });
-
-  assert.equal(settingsWithStreamingDisabled.streamingEnabled, false, 'When creating a setting instance, it will have the provided value for streamingEnabled');
-  assert.equal(settingsWithStreamingEnabled.streamingEnabled, true, 'If streamingEnabled is not provided, it will be true.');
 
   assert.end();
 });

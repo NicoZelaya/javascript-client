@@ -2,6 +2,7 @@
 import tape from 'tape';
 import includes from 'lodash/includes';
 import fetchMock from '../testUtils/fetchMock';
+import { url } from '../testUtils';
 import splitChangesMock1 from './splitChanges.since.-1.json';
 import mySegmentsMock from './mySegments.nico@split.io.json';
 import splitChangesMock2 from './splitChanges.since.1500492097547.json';
@@ -16,12 +17,12 @@ const settings = SettingsFactory({
   streamingEnabled: false
 });
 
-fetchMock.get(settings.url('/splitChanges?since=-1'), function () {
+fetchMock.get(url(settings, '/splitChanges?since=-1'), function () {
   return new Promise((res) => { setTimeout(() => res({ status: 200, body: splitChangesMock1 }), 1000); });
 });
-fetchMock.get(settings.url('/splitChanges?since=1500492097547'), { status: 200, body: splitChangesMock2 });
-fetchMock.get(settings.url('/splitChanges?since=1500492297547'), { status: 200, body: splitChangesMock3 });
-fetchMock.get(settings.url('/mySegments/nico%40split.io'), { status: 200, body: mySegmentsMock });
+fetchMock.get(url(settings, '/splitChanges?since=1500492097547'), { status: 200, body: splitChangesMock2 });
+fetchMock.get(url(settings, '/splitChanges?since=1500492297547'), { status: 200, body: splitChangesMock3 });
+fetchMock.get(url(settings, '/mySegments/nico%40split.io'), { status: 200, body: mySegmentsMock });
 fetchMock.post('*', 200);
 
 const assertionsPlanned = 3;

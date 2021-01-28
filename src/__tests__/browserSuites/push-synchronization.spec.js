@@ -16,11 +16,11 @@ import splitKillMessage from '../mocks/message.SPLIT_KILL.1457552650000.json';
 import authPushEnabledNicolas from '../mocks/auth.pushEnabled.nicolas@split.io.json';
 import authPushEnabledNicolasAndMarcio from '../mocks/auth.pushEnabled.nicolas@split.io.marcio@split.io.json';
 
-import { nearlyEqual } from '../testUtils';
+import { nearlyEqual, url } from '../testUtils';
 import includes from 'lodash/includes';
 
 // Replace original EventSource with mock
-import EventSourceMock, { setMockListener } from '../../sync/__tests__/mocks/eventSourceMock';
+import EventSourceMock, { setMockListener } from '../testUtils/eventSourceMock';
 window.EventSource = EventSourceMock;
 
 import { SplitFactory } from '../../index';
@@ -76,7 +76,7 @@ export function testSynchronization(fetchMock, assert) {
 
   // mock SSE open and message events
   setMockListener(function (eventSourceInstance) {
-    const expectedSSEurl = `${settings.url('/sse')}?channels=NzM2MDI5Mzc0_NDEzMjQ1MzA0Nw%3D%3D_NTcwOTc3MDQx_mySegments,NzM2MDI5Mzc0_NDEzMjQ1MzA0Nw%3D%3D_splits,%5B%3Foccupancy%3Dmetrics.publishers%5Dcontrol_pri,%5B%3Foccupancy%3Dmetrics.publishers%5Dcontrol_sec&accessToken=${authPushEnabledNicolas.token}&v=1.1&heartbeats=true`;
+    const expectedSSEurl = `${url(settings, '/sse')}?channels=NzM2MDI5Mzc0_NDEzMjQ1MzA0Nw%3D%3D_NTcwOTc3MDQx_mySegments,NzM2MDI5Mzc0_NDEzMjQ1MzA0Nw%3D%3D_splits,%5B%3Foccupancy%3Dmetrics.publishers%5Dcontrol_pri,%5B%3Foccupancy%3Dmetrics.publishers%5Dcontrol_sec&accessToken=${authPushEnabledNicolas.token}&v=1.1&heartbeats=true`;
     assert.equals(eventSourceInstance.url, expectedSSEurl, 'EventSource URL is the expected');
 
     /* events on first SSE connection */
@@ -122,7 +122,7 @@ export function testSynchronization(fetchMock, assert) {
       otherClient = splitio.client(otherUserKey);
 
       setMockListener(function (eventSourceInstance) {
-        const expectedSSEurl = `${settings.url('/sse')}?channels=NzM2MDI5Mzc0_NDEzMjQ1MzA0Nw%3D%3D_MjE0MTkxOTU2Mg%3D%3D_mySegments,NzM2MDI5Mzc0_NDEzMjQ1MzA0Nw%3D%3D_NTcwOTc3MDQx_mySegments,NzM2MDI5Mzc0_NDEzMjQ1MzA0Nw%3D%3D_splits,%5B%3Foccupancy%3Dmetrics.publishers%5Dcontrol_pri,%5B%3Foccupancy%3Dmetrics.publishers%5Dcontrol_sec&accessToken=${authPushEnabledNicolasAndMarcio.token}&v=1.1&heartbeats=true`;
+        const expectedSSEurl = `${url(settings, '/sse')}?channels=NzM2MDI5Mzc0_NDEzMjQ1MzA0Nw%3D%3D_MjE0MTkxOTU2Mg%3D%3D_mySegments,NzM2MDI5Mzc0_NDEzMjQ1MzA0Nw%3D%3D_NTcwOTc3MDQx_mySegments,NzM2MDI5Mzc0_NDEzMjQ1MzA0Nw%3D%3D_splits,%5B%3Foccupancy%3Dmetrics.publishers%5Dcontrol_pri,%5B%3Foccupancy%3Dmetrics.publishers%5Dcontrol_sec&accessToken=${authPushEnabledNicolasAndMarcio.token}&v=1.1&heartbeats=true`;
         assert.equals(eventSourceInstance.url, expectedSSEurl, 'new EventSource URL is the expected');
 
         /* events on second SSE connection */
@@ -182,58 +182,58 @@ export function testSynchronization(fetchMock, assert) {
   });
 
   // initial auth
-  fetchMock.getOnce(settings.url(`/auth?users=${encodeURIComponent(userKey)}`), function (url, opts) {
+  fetchMock.getOnce(url(settings, `/auth?users=${encodeURIComponent(userKey)}`), function (url, opts) {
     if (!opts.headers['Authorization']) assert.fail('`/auth` request must include `Authorization` header');
     assert.pass('auth success');
     return { status: 200, body: authPushEnabledNicolas };
   });
 
   // reauth due to new client
-  fetchMock.getOnce(settings.url(`/auth?users=${encodeURIComponent(userKey)}&users=${encodeURIComponent(otherUserKey)}`), function (url, opts) {
+  fetchMock.getOnce(url(settings, `/auth?users=${encodeURIComponent(userKey)}&users=${encodeURIComponent(otherUserKey)}`), function (url, opts) {
     if (!opts.headers['Authorization']) assert.fail('`/auth` request must include `Authorization` header');
     assert.pass('second auth success');
     return { status: 200, body: authPushEnabledNicolasAndMarcio };
   });
 
   // initial split and mySegments sync
-  fetchMock.getOnce(settings.url('/splitChanges?since=-1'), function () {
+  fetchMock.getOnce(url(settings, '/splitChanges?since=-1'), function () {
     const lapse = Date.now() - start;
     assert.true(nearlyEqual(lapse, 0), 'initial sync');
     return { status: 200, body: splitChangesMock1 };
   });
-  fetchMock.getOnce(settings.url('/mySegments/nicolas%40split.io'), { status: 200, body: mySegmentsNicolasMock1 });
+  fetchMock.getOnce(url(settings, '/mySegments/nicolas%40split.io'), { status: 200, body: mySegmentsNicolasMock1 });
 
   // split and segment sync after SSE opened
-  fetchMock.getOnce(settings.url('/splitChanges?since=1457552620999'), function () {
+  fetchMock.getOnce(url(settings, '/splitChanges?since=1457552620999'), function () {
     const lapse = Date.now() - start;
     assert.true(nearlyEqual(lapse, MILLIS_SSE_OPEN), 'sync after SSE connection is opened');
     return { status: 200, body: splitChangesMock2 };
   });
-  fetchMock.getOnce(settings.url('/mySegments/nicolas%40split.io'), { status: 200, body: mySegmentsNicolasMock1 });
+  fetchMock.getOnce(url(settings, '/mySegments/nicolas%40split.io'), { status: 200, body: mySegmentsNicolasMock1 });
 
   // fetch due to SPLIT_UPDATE event
-  fetchMock.getOnce(settings.url('/splitChanges?since=1457552620999'), { status: 200, body: splitChangesMock3 });
+  fetchMock.getOnce(url(settings, '/splitChanges?since=1457552620999'), { status: 200, body: splitChangesMock3 });
 
   // fetch due to first MY_SEGMENTS_UPDATE event
-  fetchMock.getOnce(settings.url('/mySegments/nicolas%40split.io'), { status: 200, body: mySegmentsNicolasMock2 });
+  fetchMock.getOnce(url(settings, '/mySegments/nicolas%40split.io'), { status: 200, body: mySegmentsNicolasMock2 });
 
   // fetch due to SPLIT_KILL event
-  fetchMock.getOnce(settings.url('/splitChanges?since=1457552649999'), function () {
+  fetchMock.getOnce(url(settings, '/splitChanges?since=1457552649999'), function () {
     assert.equal(client.getTreatment('whitelist'), 'not_allowed', 'evaluation with split killed immediately, before fetch is done');
     return { status: 200, body: splitChangesMock4 };
   });
 
   // initial fetch of mySegments for new client
-  fetchMock.getOnce(settings.url('/mySegments/marcio%40split.io'), { status: 200, body: mySegmentsMarcio });
+  fetchMock.getOnce(url(settings, '/mySegments/marcio%40split.io'), { status: 200, body: mySegmentsMarcio });
 
   // split and mySegment sync after second SSE opened
-  fetchMock.getOnce(settings.url('/splitChanges?since=1457552650000'), function () {
+  fetchMock.getOnce(url(settings, '/splitChanges?since=1457552650000'), function () {
     const lapse = Date.now() - start;
     assert.true(nearlyEqual(lapse, MILLIS_SECOND_SSE_OPEN), 'sync after second SSE connection is opened');
     return { status: 200, body: { splits: [], since: 1457552650000, till: 1457552650000 } };
   });
-  fetchMock.getOnce(settings.url('/mySegments/nicolas%40split.io'), { status: 200, body: mySegmentsNicolasMock2 });
-  fetchMock.getOnce(settings.url('/mySegments/marcio%40split.io'), { status: 200, body: mySegmentsMarcio });
+  fetchMock.getOnce(url(settings, '/mySegments/nicolas%40split.io'), { status: 200, body: mySegmentsNicolasMock2 });
+  fetchMock.getOnce(url(settings, '/mySegments/marcio%40split.io'), { status: 200, body: mySegmentsMarcio });
 
   fetchMock.get(new RegExp('.*'), function (url) {
     assert.fail('unexpected GET request with url: ' + url);

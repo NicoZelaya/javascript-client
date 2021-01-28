@@ -1,4 +1,4 @@
-import { GOOGLE_ANALYTICS_TO_SPLIT, SPLIT_TO_GOOGLE_ANALYTICS } from '../../../utils/constants';
+import { GOOGLE_ANALYTICS_TO_SPLIT, SPLIT_TO_GOOGLE_ANALYTICS } from '@splitsoftware/js-commons/src/utils/constants/browser';
 import validateIntegrationsSettings from './common';
 
 const validateBrowserIntegrationsSettings = settings => {

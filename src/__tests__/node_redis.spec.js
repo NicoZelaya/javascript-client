@@ -8,8 +8,8 @@ import RedisServer from 'redis-server';
 import RedisClient from 'ioredis';
 import { exec } from 'child_process';
 import { SplitFactory } from '../';
-import { merge } from '../utils/lang';
-import KeyBuilder from '../storage/Keys';
+import { merge } from '@splitsoftware/js-commons/src/utils/lang';
+import KeyBuilderSS from '@splitsoftware/js-commons/src/storages/KeyBuilderSS';
 import SettingsFactory from '../utils/settings';
 import { nearlyEqual } from './testUtils';
 
@@ -324,7 +324,7 @@ tape('NodeJS Redis', function (t) {
           // Redis client and keys required to check Redis store.
           const setting = SettingsFactory(config);
           const connection = new RedisClient(setting.storage.options.url);
-          const keys = new KeyBuilder(setting);
+          const keys = new KeyBuilderSS(setting.storage.prefix);
           const eventKey = keys.buildEventsKey();
           const impressionsKey = keys.buildImpressionsKey();
 

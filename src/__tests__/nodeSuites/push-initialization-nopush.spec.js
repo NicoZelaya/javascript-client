@@ -5,7 +5,7 @@ import splitChangesMock2 from '../mocks/splitchanges.since.1457552620999.json';
 import authPushDisabled from '../mocks/auth.pushDisabled.json';
 import authInvalidCredentials from '../mocks/auth.invalidCredentials.txt';
 import authNoUserSpecified from '../mocks/auth.noUserSpecified.txt';
-import { nearlyEqual } from '../testUtils';
+import { nearlyEqual, url } from '../testUtils';
 
 import { __setEventSource, __restore } from '../../services/getEventSource/node';
 
@@ -43,9 +43,9 @@ const settings = SettingsFactory(config);
 function testInitializationFail(fetchMock, assert, fallbackToPolling) {
   let start, splitio, client, ready = false;
 
-  fetchMock.get(new RegExp(`${settings.url('/segmentChanges/')}.*`),
+  fetchMock.get(new RegExp(`${url(settings, '/segmentChanges/')}.*`),
     { status: 200, body: { since: 10, till: 10, name: 'segmentName', added: [], removed: [] } });
-  fetchMock.getOnce(settings.url('/splitChanges?since=-1'), function () {
+  fetchMock.getOnce(url(settings, '/splitChanges?since=-1'), function () {
     const lapse = Date.now() - start;
     // using a higher error margin for Travis, due to a lower performance than local execution
     assert.true(nearlyEqual(lapse, 0, process.env.TRAVIS ? 100 : 50), 'initial sync');
@@ -53,7 +53,7 @@ function testInitializationFail(fetchMock, assert, fallbackToPolling) {
   });
 
   if (fallbackToPolling) {
-    fetchMock.getOnce(settings.url('/splitChanges?since=1457552620999'), function () {
+    fetchMock.getOnce(url(settings, '/splitChanges?since=1457552620999'), function () {
       assert.true(ready, 'client ready');
       const lapse = Date.now() - start;
       assert.true(nearlyEqual(lapse, 0, process.env.TRAVIS ? 100 : 50), 'polling (first fetch)');
@@ -61,7 +61,7 @@ function testInitializationFail(fetchMock, assert, fallbackToPolling) {
     });
   }
 
-  fetchMock.getOnce(settings.url('/splitChanges?since=1457552620999'), function () {
+  fetchMock.getOnce(url(settings, '/splitChanges?since=1457552620999'), function () {
     assert.true(ready, 'client ready');
     const lapse = Date.now() - start;
     assert.true(nearlyEqual(lapse, settings.scheduler.featuresRefreshRate, process.env.TRAVIS ? 100 : 50), 'polling (second fetch)');
@@ -83,7 +83,7 @@ function testInitializationFail(fetchMock, assert, fallbackToPolling) {
 export function testAuthWithPushDisabled(fetchMock, assert) {
   assert.plan(6);
 
-  fetchMock.getOnce(settings.url('/auth'), function (url, opts) {
+  fetchMock.getOnce(url(settings, '/auth'), function (url, opts) {
     if (!opts.headers['Authorization']) assert.fail('`/auth` request must include `Authorization` header');
     assert.pass('auth');
     return { status: 200, body: authPushDisabled };
@@ -96,7 +96,7 @@ export function testAuthWithPushDisabled(fetchMock, assert) {
 export function testAuthWith401(fetchMock, assert) {
   assert.plan(6);
 
-  fetchMock.getOnce(settings.url('/auth'), function (url, opts) {
+  fetchMock.getOnce(url(settings, '/auth'), function (url, opts) {
     if (!opts.headers['Authorization']) assert.fail('`/auth` request must include `Authorization` header');
     assert.pass('auth');
     return { status: 401, body: authInvalidCredentials };
@@ -109,7 +109,7 @@ export function testAuthWith401(fetchMock, assert) {
 export function testAuthWith400(fetchMock, assert) {
   assert.plan(6);
 
-  fetchMock.getOnce(settings.url('/auth'), function (url, opts) {
+  fetchMock.getOnce(url(settings, '/auth'), function (url, opts) {
     if (!opts.headers['Authorization']) assert.fail('`/auth` request must include `Authorization` header');
     assert.pass('auth');
     return { status: 400, body: authNoUserSpecified };
@@ -123,7 +123,7 @@ export function testNoEventSource(fetchMock, assert) {
   assert.plan(3);
 
   __setEventSource(undefined);
-  fetchMock.getOnce(settings.url('/auth'), function () {
+  fetchMock.getOnce(url(settings, '/auth'), function () {
     assert.fail('not authenticate if EventSource is not available');
   });
 

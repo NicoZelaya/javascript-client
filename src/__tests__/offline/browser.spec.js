@@ -1,6 +1,7 @@
 import tape from 'tape-catch';
 import sinon from 'sinon';
 import fetchMock from '../testUtils/fetchMock';
+import { url } from '../testUtils';
 import { SplitFactory } from '../../';
 import SettingsFactory from '../../utils/settings';
 
@@ -24,14 +25,14 @@ const replySpy = spy => {
 };
 
 const configMocks = () => {
-  fetchMock.mock(new RegExp(`${settings.url('/splitChanges/')}.*`), () => replySpy(spySplitChanges));
-  fetchMock.mock(new RegExp(`${settings.url('/segmentChanges/')}.*`), () => replySpy(spySegmentChanges));
-  fetchMock.mock(new RegExp(`${settings.url('/mySegments/')}.*`), () => replySpy(spyMySegments));
-  fetchMock.mock(settings.url('/events/bulk'), () => replySpy(spyEventsBulk));
-  fetchMock.mock(settings.url('/testImpressions/bulk'), () => replySpy(spyTestImpressionsBulk));
-  fetchMock.mock(settings.url('/testImpressions/count'), () => replySpy(spyTestImpressionsCount));
-  fetchMock.mock(settings.url('/metrics/times'), () => replySpy(spyMetricsTimes));
-  fetchMock.mock(settings.url('/metrics/counters'), () => replySpy(spyMetricsCounters));
+  fetchMock.mock(new RegExp(`${url(settings, '/splitChanges/')}.*`), () => replySpy(spySplitChanges));
+  fetchMock.mock(new RegExp(`${url(settings, '/segmentChanges/')}.*`), () => replySpy(spySegmentChanges));
+  fetchMock.mock(new RegExp(`${url(settings, '/mySegments/')}.*`), () => replySpy(spyMySegments));
+  fetchMock.mock(url(settings, '/events/bulk'), () => replySpy(spyEventsBulk));
+  fetchMock.mock(url(settings, '/testImpressions/bulk'), () => replySpy(spyTestImpressionsBulk));
+  fetchMock.mock(url(settings, '/testImpressions/count'), () => replySpy(spyTestImpressionsCount));
+  fetchMock.mock(url(settings, '/metrics/times'), () => replySpy(spyMetricsTimes));
+  fetchMock.mock(url(settings, '/metrics/counters'), () => replySpy(spyMetricsCounters));
   fetchMock.mock('*', () => replySpy(spyAny));
 };
 
@@ -47,6 +48,8 @@ tape('Browser offline mode', function (assert) {
 
   const config = {
     core: {
+      // Although `key` is mandatory according to TypeScript declaration files,
+      // it can be omitted in LOCALHOST mode. In that case, the value `localhost_key` is used.
       authorizationKey: 'localhost'
     },
     scheduler: {
@@ -109,10 +112,10 @@ tape('Browser offline mode', function (assert) {
 
     // Manager tests
     const expectedSplitView1 = {
-      name: 'testing_split', trafficType: null, killed: false, changeNumber: 0, treatments: ['on'], configs: {}
+      name: 'testing_split', trafficType: 'localhost', killed: false, changeNumber: 0, treatments: ['on'], configs: {}
     };
     const expectedSplitView2 = {
-      name: 'testing_split_with_config', trafficType: null, killed: false, changeNumber: 0, treatments: ['off'], configs: { off: '{ "color": "blue" }' }
+      name: 'testing_split_with_config', trafficType: 'localhost', killed: false, changeNumber: 0, treatments: ['off'], configs: { off: '{ "color": "blue" }' }
     };
     assert.deepEqual(manager.names(), ['testing_split', 'testing_split_with_config']);
     assert.deepEqual(manager.split('testing_split'), expectedSplitView1);
@@ -204,7 +207,7 @@ tape('Browser offline mode', function (assert) {
 
       // Manager tests
       const expectedSplitView3 = {
-        name: 'testing_split_with_config', trafficType: null, killed: false, changeNumber: 0, treatments: ['nope'], configs: {}
+        name: 'testing_split_with_config', trafficType: 'localhost', killed: false, changeNumber: 0, treatments: ['nope'], configs: {}
       };
       assert.deepEqual(manager.names(), ['testing_split', 'testing_split_2', 'testing_split_3', 'testing_split_with_config']);
       assert.deepEqual(manager.split('testing_split'), expectedSplitView1);

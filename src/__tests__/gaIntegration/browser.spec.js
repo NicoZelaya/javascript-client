@@ -1,5 +1,6 @@
 import tape from 'tape-catch';
 import fetchMock from '../testUtils/fetchMock';
+import { url } from '../testUtils';
 import gaToSplitSuite from './ga-to-split.spec';
 import splitToGaSuite from './split-to-ga.spec';
 import bothIntegrationsSuite from './both-integrations.spec';
@@ -17,8 +18,8 @@ const settings = SettingsFactory({
 
 tape('## E2E CI Tests ##', function(assert) {
 
-  fetchMock.get(settings.url('/splitChanges?since=-1'), { status: 200, body: splitChangesMock1 });
-  fetchMock.get(settings.url('/mySegments/facundo%40split.io'), { status: 200, body: mySegmentsFacundo });
+  fetchMock.get(url(settings, '/splitChanges?since=-1'), { status: 200, body: splitChangesMock1 });
+  fetchMock.get(url(settings, '/mySegments/facundo%40split.io'), { status: 200, body: mySegmentsFacundo });
 
   /* Validate GA integration */
   assert.test('E2E / GA-to-Split', gaToSplitSuite.bind(null, fetchMock));
